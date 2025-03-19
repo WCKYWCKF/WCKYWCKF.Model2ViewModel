@@ -21,7 +21,7 @@ public class DDS
     public List<int> IntList { get; init; }
 }
 
-// [GenerateViewModel(ModelType = typeof(ClientCapabilities))]
+[GenerateViewModel(ModelType = typeof(ClientCapabilities))]
 [GenerateViewModel(ModelType = typeof(ComplexModel))]
 [GenerateViewModelIgnore(ModelType = typeof(DDS), PropertyName = nameof(DDS.Str2))]
 [GenerateViewModelReplace(ModelType = typeof(ComplexModel), PropertyName = nameof(ComplexModel.Dates), ReplaceWithType = typeof(List<string>))]
