@@ -17,7 +17,7 @@
         <Description>这是一个源生成器，旨在帮助你在MVVM设计模式中，将复杂且庞大的Model配置类生成一个ViewModel版本。</Description>
         <Copyright>https://github.com/WCKYWCKF</Copyright>
         <PackageProjectUrl>https://github.com/WCKYWCKF/WCKYWCKF.Model2ViewModel</PackageProjectUrl>
-        <PackageLicenseUrl>MIT</PackageLicenseUrl>
+        <PackageLicenseUrl>https://github.com/WCKYWCKF/WCKYWCKF.Model2ViewModel/blob/master/License</PackageLicenseUrl>
         <RepositoryUrl>https://github.com/WCKYWCKF/WCKYWCKF.Model2ViewModel</RepositoryUrl>
     </PropertyGroup>
 
