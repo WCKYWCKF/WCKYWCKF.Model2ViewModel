@@ -1,0 +1,9 @@
+﻿{
+  "$schema": "https://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "DebugRoslynSourceGenerator": {
+      "commandName": "DebugRoslynComponent",
+      "targetProject": "../WCKYWCKF.RxUI.Model2ViewModel.Sample/WCKYWCKF.RxUI.Model2ViewModel.Sample.csproj"
+    }
+  }
+}
