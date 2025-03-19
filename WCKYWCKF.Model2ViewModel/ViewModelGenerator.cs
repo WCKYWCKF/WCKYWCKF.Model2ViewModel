@@ -58,8 +58,8 @@ public class ViewModelGenerator : IIncrementalGenerator
 
     private const string GenerateViewModelFullName = "WCKYWCKF.Model2ViewModel.GenerateViewModelAttribute";
     private const string GenerateViewModelName = "GenerateViewModelAttribute";
-    private const string GenerateViewModelIgnoreName = "GenerateViewModelIgnore";
-    private const string GenerateViewModelReplaceName = "GenerateViewModelReplace";
+    private const string GenerateViewModelIgnoreName = "GenerateViewModelIgnoreAttribute";
+    private const string GenerateViewModelReplaceName = "GenerateViewModelReplaceAttribute";
 
     private const string GenerateViewModelsTemplate =
         """
@@ -148,7 +148,7 @@ public class ViewModelGenerator : IIncrementalGenerator
         if (generatorAttributeSyntaxContext.TargetNode is not TypeDeclarationSyntax typeDeclarationSyntax) return null;
 
         var symbol = generatorAttributeSyntaxContext.TargetSymbol;
-        var attributeDatas = generatorAttributeSyntaxContext.Attributes
+        var attributeDatas = symbol.GetAttributes()
             .Where(x => x.AttributeClass?.ContainingNamespace
                 .ToDisplayString(GetFullNamespace)
                 .StartsWith("WCKYWCKF.Model2ViewModel") is true)
@@ -351,14 +351,14 @@ public class ViewModelGenerator : IIncrementalGenerator
                 .Where(x => x.IsStatic is false)
                 .Where(x => x.DeclaredAccessibility is Accessibility.Public)
                 .Where(x => !viewModelGenerationInfo.GenerateViewModelIgnoreInfos
-                    .Where(y => !IsNullOrEmpty(y.PropertyName))
+                    .Where(y => IsNullOrEmpty(y.PropertyName))
                     .Any(y => SymbolEqualityComparer.Default.Equals(y.TargetModelType, x.Type)))
                 .Select(x =>
                 {
                     var propertyType = x.Type;
                     //处理类型替换
                     if (viewModelGenerationInfo.GenerateViewModelReplaceInfos.Find(y =>
-                                SymbolEqualityComparer.Default.Equals(y.TargetModelType, typeSymbol))
+                                y.TargetModelType.ToDisplayString() == typeSymbol.ToDisplayString())
                             is { } replaceInfo
                         && replaceInfo.PropertyName == x.Name)
                     {

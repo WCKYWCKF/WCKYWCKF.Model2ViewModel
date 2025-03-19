@@ -3,7 +3,7 @@
   "profiles": {
     "DebugRoslynSourceGenerator": {
       "commandName": "DebugRoslynComponent",
-      "targetProject": "../WCKYWCKF.RxUI.Model2ViewModel.Sample/WCKYWCKF.RxUI.Model2ViewModel.Sample.csproj"
+      "targetProject": "../WCKYWCKF.Model2ViewModel.Sample/WCKYWCKF.Model2ViewModel.Sample.csproj"
     }
   }
 }
