@@ -149,31 +149,58 @@ public class ViewModelGenerator : IIncrementalGenerator
 
         var symbol = generatorAttributeSyntaxContext.TargetSymbol;
         var attributeDatas = symbol.GetAttributes()
-            .Where(x => x.AttributeClass?.ContainingNamespace
-                .ToDisplayString(GetFullNamespace)
-                .StartsWith("WCKYWCKF.Model2ViewModel") is true)
-            .GroupBy(x => x.AttributeClass?.Name)
+            .Where(x =>
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                return x.AttributeClass?.ContainingNamespace
+                    .ToDisplayString(GetFullNamespace)
+                    .StartsWith("WCKYWCKF.Model2ViewModel") is true;
+            })
+            .GroupBy(x =>
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                return x.AttributeClass?.Name;
+            })
             .ToList();
         return new ViewModelGenerationInfo(
             symbol.ContainingNamespace.ToDisplayString(),
             getGenerateMode(),
-            (attributeDatas.Find(x => x.Key is GenerateViewModelName)?
+            (attributeDatas.Find(x =>
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+                    return x.Key is GenerateViewModelName;
+                })?
                 .Select(x =>
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
                     TryGetNamedArgument(x, "ModelType", out INamedTypeSymbol? modelType);
                     return modelType ?? null;
                 })
-                .Where(x => x is not null)
+                .Where(x =>
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+                    return x is not null;
+                })
                 .ToList() ?? [])!,
-            (attributeDatas.Find(x => x.Key is GenerateViewModelIgnoreName)?.Select(x =>
+            (attributeDatas.Find(x =>
             {
+                cancellationToken.ThrowIfCancellationRequested();
+                return x.Key is GenerateViewModelIgnoreName;
+            })?.Select(x =>
+            {
+                cancellationToken.ThrowIfCancellationRequested();
                 TryGetNamedArgument(x, "PropertyName", out string? propertyName);
                 TryGetNamedArgument(x, "ModelType", out INamedTypeSymbol? modelType);
                 if (IsNullOrEmpty(propertyName) || modelType is null) return null;
                 return new ViewModelIgnoreGenerationInfo(propertyName, modelType);
             }).ToList() ?? [])!,
-            (attributeDatas.Find(x => x.Key is GenerateViewModelReplaceName)?.Select(x =>
+            (attributeDatas.Find(x =>
             {
+                cancellationToken.ThrowIfCancellationRequested();
+                return x.Key is GenerateViewModelReplaceName;
+            })?.Select(x =>
+            {
+                cancellationToken.ThrowIfCancellationRequested();
                 TryGetNamedArgument(x, "PropertyName", out string? propertyName);
                 TryGetNamedArgument(x, "ModelType", out INamedTypeSymbol? modelType);
                 TryGetNamedArgument(x, "ReplaceWithType", out INamedTypeSymbol? replaceWithType);

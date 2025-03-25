@@ -11,7 +11,7 @@
 
         <RootNamespace>WCKYWCKF.RxUI.Model2ViewModel</RootNamespace>
         <PackageId>WCKYWCKF.Model2ViewModel</PackageId>
-        <Version>0.7.0-pre</Version>
+        <Version>0.7.1-pre</Version>
         <Title>WCKYWCKF.Model2ViewModel</Title>
         <Authors>https://github.com/WCKYWCKF</Authors>
         <Description>这是一个源生成器，旨在帮助你在MVVM设计模式中，将复杂且庞大的Model配置类生成一个ViewModel版本。</Description>
@@ -37,6 +37,8 @@
     <ItemGroup>
       <None Remove="Readme.md" />
     </ItemGroup>
-
+    <ItemGroup>
+        <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+    </ItemGroup>
 
 </Project>
