@@ -6,6 +6,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WCKYWCKF.Model2ViewModel.Sa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WCKYWCKF.Model2ViewModel.Tests", "WCKYWCKF.Model2ViewModel.Tests\WCKYWCKF.Model2ViewModel.Tests.csproj", "{A5DA5097-C178-428F-9C2E-0A81AFE4FF8F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WCKYWCKF.Model2ViewModel.Editor", "WCKYWCKF.Model2ViewModel.Editor\WCKYWCKF.Model2ViewModel.Editor.csproj", "{8566699B-C124-479F-8188-17B693471F73}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WCKYWCKF.Model2ViewModel.Share", "WCKYWCKF.Model2ViewModel.Share\WCKYWCKF.Model2ViewModel.Share.csproj", "{DF7C40E1-52CD-43DC-B07A-9F148920A5A2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +28,13 @@ Global
 		{A5DA5097-C178-428F-9C2E-0A81AFE4FF8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A5DA5097-C178-428F-9C2E-0A81AFE4FF8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A5DA5097-C178-428F-9C2E-0A81AFE4FF8F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8566699B-C124-479F-8188-17B693471F73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8566699B-C124-479F-8188-17B693471F73}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8566699B-C124-479F-8188-17B693471F73}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8566699B-C124-479F-8188-17B693471F73}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF7C40E1-52CD-43DC-B07A-9F148920A5A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF7C40E1-52CD-43DC-B07A-9F148920A5A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF7C40E1-52CD-43DC-B07A-9F148920A5A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF7C40E1-52CD-43DC-B07A-9F148920A5A2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

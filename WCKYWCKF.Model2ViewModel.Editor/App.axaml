@@ -1,0 +1,28 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="WCKYWCKF.Model2ViewModel.Editor.App"
+             xmlns:local="using:WCKYWCKF.Model2ViewModel.Editor"
+             xmlns:semi="https://irihi.tech/semi"
+             xmlns:semi-ursa="https://irihi.tech/ursa/themes/semi"
+             xmlns:mcion="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             RequestedThemeVariant="Default">
+             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+
+    <Application.DataTemplates>
+        <local:ViewLocator/>
+    </Application.DataTemplates>
+  
+    <Application.Resources>
+        <FontFamily x:Key="DefaultFontFamily">avares://WCKYWCKF.Model2ViewModel.Editor/Assets/Fonts/HarmonyOS_Sans_SC/#HarmonyOS Sans SC</FontFamily>
+        <!-- <x:Double x:Key="ControlContentThemeFontSize">12</x:Double> -->
+        <!-- <FontFamily x:Key="ContentControlThemeFontFamily">avares://WCKYWCKF.Model2ViewModel.Editor/Assets/Fonts/HarmonyOS_Sans_SC/#HarmonyOS Sans SC</FontFamily> -->
+    </Application.Resources>
+    <Application.Styles>
+        <semi:SemiTheme Locale="zh-CN" />
+        <semi-ursa:SemiTheme Locale="zh-CN" />
+        <semi:SemiPopupAnimations />
+        <mcion:MaterialIconStyles />
+        <semi:AvaloniaEditSemiTheme />
+        <StyleInclude Source="avares://Semi.Avalonia.TreeDataGrid/Index.axaml" />
+    </Application.Styles>
+</Application>
