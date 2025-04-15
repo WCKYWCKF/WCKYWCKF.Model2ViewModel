@@ -1,0 +1,68 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ursa="https://irihi.tech/ursa"
+             xmlns:micon="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:vm="clr-namespace:WCKYWCKF.Model2ViewModel.Editor.ViewModels"
+             xmlns:mantra="https://irihi.tech/mantra"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="WCKYWCKF.Model2ViewModel.Editor.Views.EditMemberBuildTypeDialog"
+             x:DataType="vm:EditMemberBuildTypeDialogViewModel"
+             Width="500"
+             Height="400">
+    <DockPanel>
+        <StackPanel
+            DockPanel.Dock="Bottom"
+            Orientation="Horizontal"
+            HorizontalAlignment="Right"
+            Spacing="3">
+            <ursa:IconButton
+                Icon="{micon:MaterialIconExt CancelOutline}"
+                Content="取消"
+                Command="{Binding CloseCommand}" />
+            <ursa:IconButton
+                Icon="{micon:MaterialIconExt CheckCircleOutline}"
+                Content="确认"
+                Command="{Binding ConfirmCommand}" />
+        </StackPanel>
+        <mantra:MarkdownHost
+            DockPanel.Dock="Top"
+            MinWidth="10"
+            Document="{Binding EditMemberBuildTypeDialogMdDocument}">
+            <CheckBox
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Center"
+                IsChecked="{Binding IsMemberMarkedNonReplaceable}"
+                Theme="{DynamicResource CardCheckBox}"
+                Content="不要替换成员类型（主动设置)">
+                <CheckBox.IsEnabled>
+                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                        <Binding Path="CanSetIsMemberMarkedNonReplaceable" />
+                        <Binding Path="IsUsable" />
+                    </MultiBinding>
+                </CheckBox.IsEnabled>
+            </CheckBox>
+            <TextBox
+                Watermark="在此处输入新的类型"
+                UseFloatingWatermark="True"
+                Classes="clearButton"
+                Text="{Binding NewTypeName}"
+                HorizontalAlignment="Stretch">
+                <TextBox.IsEnabled>
+                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                        <Binding Path="!IsMemberMarkedNonReplaceable" />
+                        <Binding Path="IsUsable" />
+                    </MultiBinding>
+                </TextBox.IsEnabled>
+            </TextBox>
+        </mantra:MarkdownHost>
+    </DockPanel>
+    <!-- <StackPanel Orientation="Horizontal"> -->
+    <!--     <CheckBox -->
+    <!--         HorizontalAlignment="Left" -->
+    <!--         VerticalAlignment="Center" -->
+    <!--         Content="不要替换成员类型"> -->
+    <!--     </CheckBox> -->
+    <!-- </StackPanel> -->
+</UserControl>

@@ -16,11 +16,12 @@ public record M2VMReplaceGenerationInfo : M2VMPropertyOrFieldOperationBase
     {
         var typeSymbol = M2VMHelper.GetNamedArgument<ITypeSymbol>(attributeData, nameof(ReplaceFQType))!;
         ReplaceFQType = typeSymbol.ToDisplayString(M2VMHelper.GlobalSymbolDisplayFormat);
-        IsValue = typeSymbol.IsValueType;
+        // IsValue = typeSymbol.IsValueType;
         ReplaceTypeTypeofInfo = new TypeofInfo(typeSymbol);
     }
 
     public required string ReplaceFQType { get; init; }
-    public required bool IsValue { get; init; }
+
+    // public required bool IsValue { get; init; }
     public required TypeofInfo ReplaceTypeTypeofInfo { get; init; }
 }

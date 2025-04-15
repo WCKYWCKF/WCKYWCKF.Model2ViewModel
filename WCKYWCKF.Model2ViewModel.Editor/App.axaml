@@ -5,15 +5,21 @@
              xmlns:semi="https://irihi.tech/semi"
              xmlns:semi-ursa="https://irihi.tech/ursa/themes/semi"
              xmlns:mcion="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:mantra="https://irihi.tech/mantra"
              RequestedThemeVariant="Default">
-             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+    <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
     <Application.DataTemplates>
-        <local:ViewLocator/>
+        <local:ViewLocator />
     </Application.DataTemplates>
-  
+
     <Application.Resources>
-        <FontFamily x:Key="DefaultFontFamily">avares://WCKYWCKF.Model2ViewModel.Editor/Assets/Fonts/HarmonyOS_Sans_SC/#HarmonyOS Sans SC</FontFamily>
+        <ResourceDictionary>
+            <FontFamily x:Key="DefaultFontFamily">avares://WCKYWCKF.Model2ViewModel.Editor/Assets/Fonts/HarmonyOS_Sans_SC/#HarmonyOS Sans SC</FontFamily>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="Views/VerticalSplitView.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
         <!-- <x:Double x:Key="ControlContentThemeFontSize">12</x:Double> -->
         <!-- <FontFamily x:Key="ContentControlThemeFontFamily">avares://WCKYWCKF.Model2ViewModel.Editor/Assets/Fonts/HarmonyOS_Sans_SC/#HarmonyOS Sans SC</FontFamily> -->
     </Application.Resources>
@@ -22,7 +28,19 @@
         <semi-ursa:SemiTheme Locale="zh-CN" />
         <semi:SemiPopupAnimations />
         <mcion:MaterialIconStyles />
-        <semi:AvaloniaEditSemiTheme />
+        <mantra:SemiTheme />
         <StyleInclude Source="avares://Semi.Avalonia.TreeDataGrid/Index.axaml" />
+        <StyleInclude Source="Styles/Index.axaml" />
+        <!-- 高亮代码块 -->
+        <Style Selector="mantra|MarkdownViewFencedCodeBlock">
+            <Setter Property="Foreground" Value="{DynamicResource SemiColorText0}" />
+            <Setter Property="FontFamily" Value="{DynamicResource CodeFontFamily}" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="ContainerTemplate">
+                <mantra:ContainerTemplate>
+                    <mantra:AdvancedCodeBlockContainer />
+                </mantra:ContainerTemplate>
+            </Setter>
+        </Style>
     </Application.Styles>
 </Application>

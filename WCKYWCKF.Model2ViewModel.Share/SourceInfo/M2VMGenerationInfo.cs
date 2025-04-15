@@ -104,7 +104,7 @@ public record M2VMGenerationInfo
                          .Where(x =>
                          {
                              token.ThrowIfCancellationRequested();
-                             return x != null && !IsSystemType(x) && !IsIncludedInGeneratedType(x);
+                             return x != null && !M2VMHelper.IsSystemType(x) && !IsIncludedInGeneratedType(x);
                          }))
             {
                 token.ThrowIfCancellationRequested();
@@ -117,18 +117,6 @@ public record M2VMGenerationInfo
             bool IsIncludedInGeneratedType(ITypeSymbol symbol)
             {
                 return !includedInGeneratedType.Add(symbol.ToDisplayString(M2VMHelper.GlobalSymbolDisplayFormat));
-            }
-
-            bool IsSystemType(ITypeSymbol symbol)
-            {
-                if (symbol is IArrayTypeSymbol arrayTypeSymbol)
-                {
-                    symbol = arrayTypeSymbol.ElementType;
-                }
-
-                return symbol.ContainingNamespace
-                    .ToDisplayString(M2VMHelper.GlobalSymbolDisplayFormat)
-                    .StartsWith("global::System");
             }
         }
 
@@ -170,7 +158,7 @@ public record M2VMGenerationInfo
         foreach (var m2VmTypeInfo in TypeToGenerateAll)
         {
             var properties = m2VmTypeInfo.MemberInfos
-                .Where(ShouldIgnoreMember)
+                .Where(x => !ShouldIgnoreMember(x))
                 .Select(x =>
                 {
                     var shouldReplaceMemberType = ShouldReplaceMemberType(x, out var newGlobalFqType);
@@ -213,13 +201,13 @@ public record M2VMGenerationInfo
 
     public M2VMPropertyOrFieldOperationInfo? GetPropertyOrFieldOperationInfo(M2VMTypeMemberInfo m2VmTypeMemberInfo)
     {
-        return Operations.Find(x => x.TargetTypeFQType == m2VmTypeMemberInfo.GlobalTypeFullName
+        return Operations.Find(x => x.TargetTypeFQType == m2VmTypeMemberInfo.ContainerGlobalTypeFullName
                                     && x.TargetMemberName == m2VmTypeMemberInfo.MemberName);
     }
 
     public M2VMReplaceGenerationInfo? GetReplaceGenerationInfo(M2VMTypeMemberInfo m2VmTypeMemberInfo)
     {
-        return Replaces.Find(x => x.TargetTypeFQType == m2VmTypeMemberInfo.GlobalTypeFullName
+        return Replaces.Find(x => x.TargetTypeFQType == m2VmTypeMemberInfo.ContainerGlobalTypeFullName
                                   && x.TargetMemberName == m2VmTypeMemberInfo.MemberName);
     }
 
@@ -237,23 +225,22 @@ public record M2VMGenerationInfo
 
     public bool ShouldIgnoreMember(M2VMTypeMemberInfo m2VmTypeMemberInfo)
     {
-        //是默认应该包含的成员且没有被标记IgnoreProperty的返回true
-        //是不默认包含的成员但被标记了IncludePropertyOrField的返回true
+        //是默认应该包含的成员且没有被标记IgnoreProperty的返回false
+        //是不默认包含的成员但被标记了IncludePropertyOrField的返回false
         var operationInfo = GetPropertyOrFieldOperationInfo(m2VmTypeMemberInfo);
         var isDefaultIncluded = M2VMHelper.IsDefaultIncluded(m2VmTypeMemberInfo);
-        if (operationInfo is null) return isDefaultIncluded;
+        if (operationInfo is null) return !isDefaultIncluded;
         if ((operationInfo.TargetOperation & PropertyOrFieldOperationKind.IgnoreProperty) > 0
-            && isDefaultIncluded) return false;
+            && isDefaultIncluded) return true;
         if ((operationInfo.TargetOperation & PropertyOrFieldOperationKind.IncludePropertyOrField) > 0
-            && !isDefaultIncluded) return true;
-        return isDefaultIncluded;
+            && !isDefaultIncluded) return false;
+        return !isDefaultIncluded;
     }
 
     public bool? ShouldReplaceMemberType(M2VMTypeMemberInfo m2VmTypeMemberInfo, out string newGlobalFQType)
     {
         newGlobalFQType = m2VmTypeMemberInfo.GlobalTypeFullName;
         var operationInfo = GetPropertyOrFieldOperationInfo(m2VmTypeMemberInfo);
-        var isSystemType = m2VmTypeMemberInfo.GlobalTypeFullName.StartsWith("global::System");
 
         if (operationInfo is not null
             && (operationInfo.TargetOperation & PropertyOrFieldOperationKind.DoNotReplaceTargetType) > 0)
@@ -265,7 +252,7 @@ public record M2VMGenerationInfo
             return null;
         }
 
-        if (isSystemType) return false;
+        if (m2VmTypeMemberInfo.IsMemberTypeSystem) return false;
         var info = TypeToGenerateAll.Find(x => x.GlobalTypeFullName == m2VmTypeMemberInfo.GlobalTypeFullName);
         if (info is not null) newGlobalFQType = M2VMHelper.GetNewGlobalTypeFullName(this, info);
 

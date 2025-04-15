@@ -1,0 +1,21 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+            <SolidColorBrush x:Key="AccessibilityEmphasisColorPublic" Opacity="0.25" Color="#3366CC" />
+            <SolidColorBrush x:Key="AccessibilityEmphasisColorPrivate" Opacity="0.25" Color="#FFAAAA" />
+            <SolidColorBrush x:Key="AccessibilityEmphasisColorInternal" Opacity="0.25" Color="#AADDAA" />
+            <SolidColorBrush x:Key="AccessibilityEmphasisColorProtected" Opacity="0.25" Color="#DDAADD" />
+            <SolidColorBrush x:Key="MemberTypeEmphasisColorProperty" Opacity="0.25" Color="#FFFF99" />
+            <SolidColorBrush x:Key="MemberTypeEmphasisColorField" Opacity="0.25" Color="#FFCCCC" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+            <SolidColorBrush x:Key="AccessibilityEmphasisColorPublic" Opacity="0.25" Color="#AADDFF" />
+            <SolidColorBrush x:Key="AccessibilityEmphasisColorPrivate" Opacity="0.25" Color="#F44336" />
+            <SolidColorBrush x:Key="AccessibilityEmphasisColorInternal" Opacity="0.25" Color="#4CAF50" />
+            <SolidColorBrush x:Key="AccessibilityEmphasisColorProtected" Opacity="0.25" Color="#9C27B0" />
+            <SolidColorBrush x:Key="MemberTypeEmphasisColorProperty" Opacity="0.25" Color="#FFD700" />
+            <SolidColorBrush x:Key="MemberTypeEmphasisColorField" Opacity="0.25" Color="#FFA07A" />
+        </ResourceDictionary>
+    </ResourceDictionary.ThemeDictionaries>
+</ResourceDictionary>

@@ -1,28 +1,20 @@
 using System;
 using System.Collections.Generic;
 using CommunityToolkit.Mvvm.ComponentModel;
-using EmmyLua.LanguageServer.Framework.Protocol.Capabilities.Client.ClientCapabilities;
-using EmmyLua.LanguageServer.Framework.Protocol.Capabilities.Common;
-using EmmyLua.LanguageServer.Framework.Protocol.Model.Union;
-using ReactiveUI;
-using WCKYWCKF.Model2ViewModel;
 
 namespace WCKYWCKF.Model2ViewModel.Sample;
 
-public partial class ComplexModel
+public class ComplexModel
 {
+    private int TestPrivateField;
+    public string TestPublicField;
+
     public List<Dictionary<string, int[]>>? NestedCollection { get; set; }
     public DDS? DDS { get; init; }
     public IEnumerable<DateTime>? Dates { get; }
 
     protected string TestProtected { get; init; }
-    private string TestPrivate { get; init; }
-    private string TestPrivateField;
-    public string TestPublicField;
-
-    public ComplexModel()
-    {
-    }
+    private int TestPrivate { get; init; }
 }
 
 public class DDS
@@ -32,11 +24,18 @@ public class DDS
     public List<int>? IntList { get; init; }
 }
 
-[M2VMGenerationInfo(TargetTypeFQType = typeof(ClientCapabilities))]
+// [M2VMGenerationInfo(TargetTypeFQType = typeof(ClientCapabilities))]
 [M2VMGenerationInfo(TargetTypeFQType = typeof(ComplexModel))]
 [M2VMPropertyOrFieldOperationInfo(TargetTypeFQType = typeof(DDS),
     TargetMemberName = nameof(DDS.Str2),
     TargetOperation = PropertyOrFieldOperationKind.IgnoreProperty)]
+[M2VMPropertyOrFieldOperationInfo(TargetTypeFQType = typeof(ComplexModel),
+    TargetMemberName = nameof(ComplexModel.TestPublicField),
+    TargetOperation = PropertyOrFieldOperationKind.IncludePropertyOrField)]
+[M2VMPropertyOrFieldOperationInfo(TargetTypeFQType = typeof(ComplexModel),
+    TargetMemberName = "TestPrivateField",
+    TargetOperation = PropertyOrFieldOperationKind.IncludePropertyOrField |
+                      PropertyOrFieldOperationKind.TypeIsNullable)]
 [M2VMReplaceGenerationInfo(TargetTypeFQType = typeof(ComplexModel),
     TargetMemberName = nameof(ComplexModel.Dates),
     ReplaceFQType = typeof(List<string>))]

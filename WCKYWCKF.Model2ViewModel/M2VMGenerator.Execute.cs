@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.Json;
 using Microsoft.CodeAnalysis;
 using WCKYWCKF.RxUI.Model2ViewModel.Model;
@@ -29,13 +26,11 @@ public partial class M2VMGenerator
         {
             var viewModelBuildInfos = generateViewModelInfo.CreateViewModelBuildInfos(out var converterInfos);
             foreach (var viewModelBuildInfo in viewModelBuildInfos)
-            {
                 context.AddSource(
                     $"{viewModelBuildInfo.Namespace}{viewModelBuildInfo.ViewModelName}.g.cs",
                     viewModelBuildInfo.CreateViewModelCode(
                         generateViewModelInfo.GenerateMode,
                         generateViewModelInfo.UseAutoField));
-            }
         }
     }
 //         return;

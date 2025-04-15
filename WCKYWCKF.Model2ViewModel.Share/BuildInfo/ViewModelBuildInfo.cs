@@ -4,6 +4,24 @@ namespace WCKYWCKF.RxUI.Model2ViewModel.Model;
 
 public record ViewModelBuildInfo
 {
+    private const string INotifyPropertyChangedCode =
+        """
+            public event PropertyChangedEventHandler? PropertyChanged;
+
+            protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            }
+
+            protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
+            {
+                if (EqualityComparer<T>.Default.Equals(field, value)) return false;
+                field = value;
+                OnPropertyChanged(propertyName);
+                return true;
+            }
+        """;
+
     public required string ViewModelName { get; init; }
     public required string GlobalSourceFQType { get; init; }
     public required string Namespace { get; init; }
@@ -26,9 +44,7 @@ public record ViewModelBuildInfo
 
               """);
         foreach (var propertyBuildInfo in Properties)
-        {
             stringBuilder.AppendLine(propertyBuildInfo.CreatePropertyCode(generateMode, useAutoField));
-        }
 
         stringBuilder.AppendLine(
             $$"""
@@ -62,22 +78,4 @@ public record ViewModelBuildInfo
             _ => "global::System.ComponentModel.INotifyPropertyChanged"
         };
     }
-
-    private const string INotifyPropertyChangedCode =
-        """
-            public event PropertyChangedEventHandler? PropertyChanged;
-        
-            protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-            {
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-            }
-        
-            protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
-            {
-                if (EqualityComparer<T>.Default.Equals(field, value)) return false;
-                field = value;
-                OnPropertyChanged(propertyName);
-                return true;
-            }
-        """;
 }

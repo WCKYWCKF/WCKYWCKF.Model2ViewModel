@@ -1,0 +1,52 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:WCKYWCKF.Model2ViewModel.Editor.ViewModels"
+             xmlns:ursa="https://irihi.tech/ursa"
+             xmlns:mantra="https://irihi.tech/mantra"
+             xmlns:views="clr-namespace:WCKYWCKF.Model2ViewModel.Editor.Views"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             Width="{Binding $parent[ursa:UrsaWindow].Bounds.Width,Converter={x:Static views:PreviewGeneratedCodeDialog.DoubleToDoubleConverter}}"
+             Height="{Binding $parent[ursa:UrsaWindow].Bounds.Height,Converter={x:Static views:PreviewGeneratedCodeDialog.DoubleToDoubleConverter}}"
+             x:Class="WCKYWCKF.Model2ViewModel.Editor.Views.PreviewGeneratedCodeDialog"
+             x:DataType="vm:MainWindowViewModel">
+
+    <Grid
+        RowDefinitions="65*,35*"
+        ColumnDefinitions="35*,65*">
+        <mantra:MarkdownView
+            Grid.Row="0"
+            Grid.Column="0"
+            Margin="5"
+            Document="{Binding SummaryGeneratedBorderMdDocument}" />
+        <mantra:MarkdownView
+            Grid.Row="1"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Margin="5"
+            Document="{Binding RootTypePartialCodeBorderMdDocument}" />
+        <ursa:LoadingContainer
+            Grid.Row="0"
+            Grid.Column="1"
+            Margin="5"
+            LoadingMessage="{Binding LoadingMessage}"
+            IsLoading="{Binding LoadingMessage,Converter={x:Static ObjectConverters.IsNotNull}}"
+            HorizontalContentAlignment="Stretch"
+            VerticalContentAlignment="Stretch">
+            <TabControl
+                ItemsSource="{Binding PreviewGeneratedCodeFiles}">
+                <TabControl.ItemTemplate>
+                    <DataTemplate>
+                        <Label Content="{Binding FileName}" />
+                    </DataTemplate>
+                </TabControl.ItemTemplate>
+                <TabControl.ContentTemplate>
+                    <DataTemplate DataType="vm:ViewModelCodeFile">
+                        <mantra:MarkdownView Document="{Binding CodeMdDocument}" />
+                    </DataTemplate>
+                </TabControl.ContentTemplate>
+            </TabControl>
+        </ursa:LoadingContainer>
+    </Grid>
+</UserControl>

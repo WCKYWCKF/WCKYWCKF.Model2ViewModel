@@ -1,23 +1,373 @@
-<Window xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:vm="using:WCKYWCKF.Model2ViewModel.Editor.ViewModels"
-        xmlns:views="using:WCKYWCKF.Model2ViewModel.Editor.Views"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:ursa="https://irihi.tech/ursa"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        x:Class="WCKYWCKF.Model2ViewModel.Editor.Views.MainWindow"
-        x:DataType="vm:MainWindowViewModel"
-        Icon="/Assets/avalonia-logo.ico"
-        Title="WCKYWCKF.Model2ViewModel.Editor">
-    <Design.DataContext>
-        <!-- This only sets the DataContext for the previewer in an IDE,
-             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-        <vm:MainWindowViewModel />
-    </Design.DataContext>
-    <StackPanel>
-        <Button Content="ref" Command="{Binding RefCommand}"></Button>
-        <ursa:DualBadge Classes="Plastic Purple" Content="sss" IsVisible="{Binding VTest}"></ursa:DualBadge>
-    </StackPanel>
+<ursa:UrsaWindow
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="using:WCKYWCKF.Model2ViewModel.Editor.ViewModels"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ursa="https://irihi.tech/ursa"
+    xmlns:mantra="https://irihi.tech/mantra"
+    xmlns:micon="using:Material.Icons.Avalonia"
+    xmlns:waal="clr-namespace:WCKY.Avalonia.AnimationLibrary;assembly=WCKY.Avalonia.AnimationLibrary"
+    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+    x:Class="WCKYWCKF.Model2ViewModel.Editor.Views.MainWindow"
+    x:DataType="vm:MainWindowViewModel"
+    Icon="/Assets/avalonia-logo.ico"
+    Title="WCKYWCKF.Model2ViewModel.Editor">
+    <ursa:UrsaWindow.RightContent>
+        <ursa:ThemeToggleButton IsThreeState="True" />
+    </ursa:UrsaWindow.RightContent>
+    <ursa:UrsaWindow.Styles>
+        <!-- <Style Selector="mantra|GenericBlocksPresenter"> -->
+        <!--     <Setter Property="IncrementalMode" Value="True" /> -->
+        <!-- </Style> -->
+        <Style Selector="ursa|TitleBar">
+            <Setter Property="HorizontalAlignment" Value="Right" />
+        </Style>
+    </ursa:UrsaWindow.Styles>
+    <ursa:UrsaWindow.Resources>
 
-</Window>
+    </ursa:UrsaWindow.Resources>
+    <ursa:LoadingContainer
+        HorizontalContentAlignment="Stretch"
+        VerticalContentAlignment="Stretch"
+        LoadingMessage="{Binding LoadingMessage}"
+        IsLoading="{Binding LoadingMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+        <Panel>
+            <Panel.Styles>
+                <Style Selector="Border.Hide">
+                    <Style.Animations>
+                        <Animation
+                            Duration="0:0:0.3"
+                            FillMode="Both">
+                            <Animation.Easing>
+                                <CubicEaseInOut />
+                            </Animation.Easing>
+                            <KeyFrame Cue="0%">
+                                <Setter Property="Opacity" Value="1.0" />
+                            </KeyFrame>
+                            <KeyFrame Cue="100%">
+                                <Setter Property="Opacity" Value="0.0" />
+                            </KeyFrame>
+                        </Animation>
+                    </Style.Animations>
+                </Style>
+            </Panel.Styles>
+            <Border
+                ZIndex="100"
+                Margin="0,32,0,0"
+                Classes.Hide="{Binding ModelMetadata,Converter={x:Static ObjectConverters.IsNotNull}}"
+                IsVisible="{Binding !!$self.Opacity}"
+                Theme="{DynamicResource CardBorder}">
+                <mantra:MarkdownView
+                    Document="{x:Static vm:MainWindowViewModel.InitialHelpBorderMdDocument}" />
+            </Border>
+            <Grid RowDefinitions="32,Auto,Auto,*">
+                <DockPanel
+                    Grid.Row="0"
+                    Grid.ColumnSpan="3">
+                    <ursa:PathPicker
+                        Title="选取类型信息文件"
+                        FileFilter="[类型信息文件,*.json][All]"
+                        AllowMultiple="False"
+                        UsePickerType="OpenFile"
+                        IsClearSelectionOnCancel="False"
+                        IsOmitCommandOnCancel="True"
+                        Command="{Binding OpenModelMetadataFileCommand}"
+                        Theme="{DynamicResource ButtonPathPicker}" />
+                    <Menu ItemContainerTheme="{DynamicResource {x:Type MenuItem}}">
+                        <!-- <MenuItem Icon="{micon:MaterialIconExt DoneAll}" Header="应用所有修改" /> -->
+                        <MenuItem
+                            Icon="{micon:MaterialIconExt Restore}"
+                            Header="还原所有修改"
+                            Command="{Binding RestoreCommand}" />
+                        <MenuItem
+                            Icon="{micon:MaterialIconExt ContentSave}"
+                            Header="保存现在的数据至文件"
+                            Command="{Binding SaveChangedCommand}" />
+                        <MenuItem
+                            Icon="{micon:MaterialIconExt Eye}"
+                            Header="预览将生成的代码"
+                            Click="MenuItem_OnClick"
+                            IsEnabled="{Binding ModelMetadata,Converter={x:Static ObjectConverters.IsNotNull}}" />
+                    </Menu>
+                    <mantra:MarkdownTextBlock
+                        DockPanel.Dock="Right"
+                        VerticalAlignment="Center"
+                        IsVisible="{Binding SaveFilePath,Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                        Text="{Binding SaveFilePath,StringFormat='` {0} `'}" />
+                </DockPanel>
+                <DockPanel
+                    Grid.Row="1">
+                    <ToggleButton
+                        Content="{micon:MaterialIconExt Edit}"
+                        DockPanel.Dock="Right"
+                        Margin="5"
+                        Click="InputElement_OnPointerReleased">
+                        <ToggleButton.Tag>
+                            <Grid RowDefinitions="*,Auto,Auto">
+                                <ContentPresenter
+                                    Grid.Row="0"
+                                    Content="{Binding}">
+                                    <ContentPresenter.ContentTemplate>
+                                        <DataTemplate DataType="vm:MainWindowViewModel">
+                                            <mantra:MarkdownHost
+                                                Document="{x:Static vm:MainWindowViewModel.BatchEditingTabItemMdDocument}">
+                                                <ursa:Form
+                                                    LabelAlignment="Center"
+                                                    LabelPosition="Top"
+                                                    VerticalAlignment="Center"
+                                                    HorizontalAlignment="Stretch">
+                                                    <TextBox
+                                                        Classes="clearButton"
+                                                        Watermark="为空则不起用此设置；输入null将清楚此设置"
+                                                        Text="{Binding BatchEditing_NewMemberBuildType}"
+                                                        ursa:FormItem.Label="成员在生成中的新类型" />
+                                                    <CheckBox
+                                                        Theme="{DynamicResource CardCheckBox}"
+                                                        IsThreeState="True"
+                                                        ursa:FormItem.NoLabel="True"
+                                                        IsChecked="{Binding BatchEditing_NewIsMemberIncludeInBuild}"
+                                                        Content="要把成员纳入生成中吗？" />
+                                                    <CheckBox
+                                                        Theme="{DynamicResource CardCheckBox}"
+                                                        IsThreeState="True"
+                                                        ursa:FormItem.NoLabel="True"
+                                                        IsChecked="{Binding BatchEditing_NewIsMemberNullable}"
+                                                        Content="成员在生成中的类型可为空吗？" />
+                                                    <CheckBox
+                                                        Theme="{DynamicResource CardCheckBox}"
+                                                        IsThreeState="True"
+                                                        ursa:FormItem.NoLabel="True"
+                                                        IsChecked="{Binding BatchEditing_NewIsMemberMarkedNonReplaceable}"
+                                                        Content="不要替换成员在生成中的类型？" />
+                                                </ursa:Form>
+                                            </mantra:MarkdownHost>
+                                        </DataTemplate>
+                                    </ContentPresenter.ContentTemplate>
+                                </ContentPresenter>
+                                <ursa:IconButton
+                                    Grid.Row="1"
+                                    HorizontalAlignment="Stretch"
+                                    Icon="{micon:MaterialIconExt NotificationClearAll}"
+                                    Content="取消所有选择"
+                                    Command="{Binding CancelCurrentSelectionCommand}" />
+                                <ursa:IconButton
+                                    Grid.Row="2"
+                                    HorizontalAlignment="Stretch"
+                                    Icon="{micon:MaterialIconExt DoneAll}"
+                                    Content="确认批量修改"
+                                    Command="{Binding ConfirmBatchModifyCommand}" />
+                            </Grid>
+                        </ToggleButton.Tag>
+                    </ToggleButton>
+                    <ToggleButton
+                        Content="{micon:MaterialIconExt Filter}"
+                        DockPanel.Dock="Right"
+                        Margin="5"
+                        Click="InputElement_OnPointerReleased">
+                        <ToggleButton.Tag>
+                            <ContentPresenter
+                                Content="{Binding}">
+                                <ContentPresenter.ContentTemplate>
+                                    <DataTemplate DataType="vm:MainWindowViewModel">
+                                        <mantra:MarkdownHost
+                                            Document="{x:Static vm:MainWindowViewModel.FilterTabItemMdDocument}">
+                                            <ursa:Form
+                                                LabelAlignment="Center"
+                                                LabelPosition="Top"
+                                                VerticalAlignment="Center"
+                                                HorizontalAlignment="Stretch">
+                                                <TextBox
+                                                    Classes="clearButton"
+                                                    Text="{Binding Filter_MemberName}"
+                                                    Watermark="为空则不起用此过滤"
+                                                    ursa:FormItem.Label="通过成员名称过滤：" />
+                                                <TextBox
+                                                    Classes="clearButton"
+                                                    Watermark="为空则不起用此过滤"
+                                                    Text="{Binding Filter_MemberGlobeFQType}"
+                                                    ursa:FormItem.Label="通过成员类型的完全限定名称过滤：" />
+                                                <TextBox
+                                                    Classes="clearButton"
+                                                    Watermark="为空则不起用此过滤"
+                                                    Text="{Binding Filter_MemberBuildType}"
+                                                    ursa:FormItem.Label="通过成员在生成中的类型名称过滤：" />
+                                                <CheckBox
+                                                    Theme="{DynamicResource CardCheckBox}"
+                                                    IsThreeState="True"
+                                                    ursa:FormItem.NoLabel="True"
+                                                    IsChecked="{Binding Filter_IsField}"
+                                                    Content="通过成员的类型是否是字段过滤" />
+                                                <CheckBox
+                                                    Theme="{DynamicResource CardCheckBox}"
+                                                    IsThreeState="True"
+                                                    ursa:FormItem.NoLabel="True"
+                                                    IsChecked="{Binding Filter_IsMemberIncludeInBuild}"
+                                                    Content="通过成员是否被纳入生成中过滤" />
+                                                <CheckBox
+                                                    Theme="{DynamicResource CardCheckBox}"
+                                                    IsThreeState="True"
+                                                    ursa:FormItem.NoLabel="True"
+                                                    IsChecked="{Binding Filter_MemberCanBeNull}"
+                                                    Content="通过成员在生成中的类型是否可为空过滤" />
+                                                <ursa:EnumSelector
+                                                    HorizontalAlignment="Stretch"
+                                                    EnumType="vm:FilterAccessibility"
+                                                    Value="{Binding Filter_MemberAccessibility}"
+                                                    ursa:FormItem.Label="通过成员的可访问性过滤：" />
+                                                <ursa:EnumSelector
+                                                    HorizontalAlignment="Stretch"
+                                                    EnumType="vm:FilterAccessibility"
+                                                    Value="{Binding Filter_MemberGetterAccessibility}"
+                                                    ursa:FormItem.Label="通过成员Getter的可访问性过滤：" />
+                                                <ursa:EnumSelector
+                                                    HorizontalAlignment="Stretch"
+                                                    EnumType="vm:FilterAccessibility"
+                                                    Value="{Binding Filter_MemberSetterAccessibility}"
+                                                    ursa:FormItem.Label="通过成员Setter的可访问性过滤：" />
+                                            </ursa:Form>
+                                        </mantra:MarkdownHost>
+                                    </DataTemplate>
+                                </ContentPresenter.ContentTemplate>
+                            </ContentPresenter>
+                        </ToggleButton.Tag>
+                    </ToggleButton>
+                    <TextBox
+                        DockPanel.Dock="Left"
+                        Margin="5"
+                        Text="{Binding Filter_MemberCodeText}"
+                        Classes="clearButton" />
+                </DockPanel>
+                <DockPanel
+                    Grid.Row="2"
+                    Margin="5">
+                    <mantra:MarkdownTextBlock
+                        DockPanel.Dock="Right"
+                        Margin="5,0,5,0"
+                        ToolTip.Tip="此值越大，对与输入的检索文本的匹配度越高，反之亦然。"
+                        Text="{Binding MinimumAcceptedWeightedRatio,StringFormat='`接受的最小加权比率：{0}%`'}" />
+                    <Slider
+                        Minimum="0"
+                        Maximum="100"
+                        Value="{Binding MinimumAcceptedWeightedRatio}"
+                        DockPanel.Dock="Left" />
+                </DockPanel>
+                <SplitView
+                    Grid.Row="3"
+                    PanePlacement="Right"
+                    DisplayMode="Overlay"
+                    UseLightDismissOverlayMode="True"
+                    OpenPaneLength="420"
+                    IsPaneOpen="{Binding #Tools_ContentControl.Content,Converter={x:Static ObjectConverters.IsNotNull}}"
+                    PropertyChanged="AvaloniaObject_OnPropertyChanged">
+                    <SplitView.Pane>
+                        <Border Theme="{DynamicResource CardBorder}">
+                            <TransitioningContentControl
+                                Name="Tools_ContentControl"
+                                Width="380">
+                                <TransitioningContentControl.PageTransition>
+                                    <CompositePageTransition>
+                                        <waal:PageSlide
+                                            FillMode="None"
+                                            Duration="0,0,0.5">
+                                            <waal:PageSlide.SlideInEasing>
+                                                <CubicEaseInOut />
+                                            </waal:PageSlide.SlideInEasing>
+                                            <waal:PageSlide.SlideOutEasing>
+                                                <CubicEaseInOut />
+                                            </waal:PageSlide.SlideOutEasing>
+                                        </waal:PageSlide>
+                                        <waal:CrossFade
+                                            FillMode="None"
+                                            Duration="0,0,0.2">
+                                            <waal:CrossFade.FadeInEasing>
+                                                <SineEaseInOut />
+                                            </waal:CrossFade.FadeInEasing>
+                                            <waal:CrossFade.FadeOutEasing>
+                                                <SineEaseInOut />
+                                            </waal:CrossFade.FadeOutEasing>
+                                        </waal:CrossFade>
+                                    </CompositePageTransition>
+                                </TransitioningContentControl.PageTransition>
+                            </TransitioningContentControl>
+                        </Border>
+                    </SplitView.Pane>
+                    <SplitView
+                        PanePlacement="Right"
+                        Theme="{DynamicResource VerticalSplitView}"
+                        IsPaneOpen="{Binding IsInSearchEditMode}"
+                        OpenPaneLength="{Binding $self.Bounds.Height}"
+                        UseLightDismissOverlayMode="False"
+                        DisplayMode="Inline">
+                        <SplitView.Styles>
+                            <Style Selector="TreeDataGridRow">
+                                <Setter x:DataType="vm:MetadataTDGItemViewModel" Property="Tag"
+                                        Value="{Binding IsField}" />
+                            </Style>
+                            <Style Selector="TreeDataGridRow[Tag=true]">
+                                <Setter Property="Background" Value="{DynamicResource MemberTypeEmphasisColorField}" />
+                            </Style>
+                            <Style Selector="TreeDataGridRow[Tag=false]">
+                                <Setter Property="Background" Value="{DynamicResource MemberTypeEmphasisColorProperty}" />
+                            </Style>
+                        </SplitView.Styles>
+                        <SplitView.Pane>
+                            <!-- <ListBox ItemsSource="{Binding TestSource}"> -->
+                            <!--     <ListBox.ItemTemplate> -->
+                            <!--         <DataTemplate> -->
+                            <!--             <StackPanel Orientation="Horizontal"> -->
+                            <!--                 <TextBlock Text="{Binding Name}"></TextBlock> -->
+                            <!--                 <TextBlock Text="{Binding WeightedRatioForMemberCodeText}"></TextBlock> -->
+                            <!--             </StackPanel> -->
+                            <!--         </DataTemplate> -->
+                            <!--     </ListBox.ItemTemplate> -->
+                            <!-- </ListBox> -->
+                            <TreeDataGrid
+                                Margin="5"
+                                Source="{Binding SearchSource}"
+                                CanUserSortColumns="False">
+                                <TreeDataGrid.Resources>
+                                    <ResourceDictionary>
+                                        <ResourceDictionary.MergedDictionaries>
+                                            <ResourceInclude
+                                                Source="/Views/TreeDataGridTemplate/BuildInclusionCheckBoxTemplate.axaml" />
+                                            <ResourceInclude
+                                                Source="/Views/TreeDataGridTemplate/IsMemberNullableCheckBoxTemplate.axaml" />
+                                            <ResourceInclude
+                                                Source="/Views/TreeDataGridTemplate/MemberAccessibilityDisplayTemplate.axaml" />
+                                            <ResourceInclude
+                                                Source="/Views/TreeDataGridTemplate/MemberBuildTypeDisplayTemplate.axaml" />
+                                            <ResourceInclude
+                                                Source="/Views/TreeDataGridTemplate/SelectionHandlingCheckBoxTemplate.axaml" />
+                                        </ResourceDictionary.MergedDictionaries>
+                                    </ResourceDictionary>
+                                </TreeDataGrid.Resources>
+                            </TreeDataGrid>
+                        </SplitView.Pane>
+                        <TreeDataGrid
+                            Margin="5"
+                            Source="{Binding Source}"
+                            CanUserSortColumns="False">
+                            <TreeDataGrid.Resources>
+                                <ResourceDictionary>
+                                    <ResourceDictionary.MergedDictionaries>
+                                        <ResourceInclude
+                                            Source="/Views/TreeDataGridTemplate/BuildInclusionCheckBoxTemplate.axaml" />
+                                        <ResourceInclude
+                                            Source="/Views/TreeDataGridTemplate/IsMemberNullableCheckBoxTemplate.axaml" />
+                                        <ResourceInclude
+                                            Source="/Views/TreeDataGridTemplate/MemberAccessibilityDisplayTemplate.axaml" />
+                                        <ResourceInclude
+                                            Source="/Views/TreeDataGridTemplate/MemberBuildTypeDisplayTemplate.axaml" />
+                                        <ResourceInclude
+                                            Source="/Views/TreeDataGridTemplate/SelectionHandlingCheckBoxTemplate.axaml" />
+                                    </ResourceDictionary.MergedDictionaries>
+                                </ResourceDictionary>
+                            </TreeDataGrid.Resources>
+                        </TreeDataGrid>
+                    </SplitView>
+                </SplitView>
+            </Grid>
+        </Panel>
+    </ursa:LoadingContainer>
+</ursa:UrsaWindow>

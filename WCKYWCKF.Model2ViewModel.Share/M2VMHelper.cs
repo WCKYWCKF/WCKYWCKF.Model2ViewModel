@@ -97,6 +97,15 @@ public static class M2VMHelper
     public static readonly SymbolDisplayFormat GlobalSymbolDisplayFormat =
         SymbolDisplayFormat.FullyQualifiedFormat.WithGlobalNamespaceStyle(SymbolDisplayGlobalNamespaceStyle.Included);
 
+    public static bool IsSystemType(ITypeSymbol symbol)
+    {
+        if (symbol is IArrayTypeSymbol arrayTypeSymbol) symbol = arrayTypeSymbol.ElementType;
+
+        return symbol.ContainingNamespace
+            .ToDisplayString(GlobalSymbolDisplayFormat)
+            .StartsWith("global::System");
+    }
+
     public static bool IsAutoField(IFieldSymbol? memberInfo)
     {
         return memberInfo?.Name.EndsWith("k__BackingField") ?? false;
@@ -124,6 +133,11 @@ public static class M2VMHelper
             : SymbolDisplayFormat.MinimallyQualifiedFormat)})";
     }
 
+    public static string GetTypeofTargetTypeFQType(string typeName)
+    {
+        return $"typeof({typeName})";
+    }
+
     public static IEnumerable<string> GetTypeofTargetTypeFQType(IEnumerable<ITypeSymbol> typeSymbols)
     {
         return typeSymbols.Select(typeSymbol => GetTypeofTargetTypeFQType(typeSymbol, true));
@@ -148,7 +162,10 @@ public static class M2VMHelper
         return false;
     }
 
-    public static string GetFieldName(string propertyName) => $"_{propertyName[0].ToString().ToLower()}{propertyName[1..]}";
+    public static string GetFieldName(string propertyName)
+    {
+        return $"_{propertyName[0].ToString().ToLower()}{propertyName[1..]}";
+    }
 }
 
 [JsonSerializable(typeof(GenerateMode))]

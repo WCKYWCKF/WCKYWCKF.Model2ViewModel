@@ -1,0 +1,21 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:vm="clr-namespace:WCKYWCKF.Model2ViewModel.Editor.ViewModels"
+                    xmlns:views="clr-namespace:WCKYWCKF.Model2ViewModel.Editor.Views"
+                    xmlns:mantra="https://irihi.tech/mantra">
+    <DataTemplate
+        x:Key="{x:Static vm:MainWindowViewModel.BuildInclusionCheckBoxTemplateKey}"
+        DataType="vm:MetadataTDGItemViewModel">
+        <CheckBox
+            IsVisible="{Binding IsField,Converter={x:Static ObjectConverters.IsNotNull}}"
+            IsChecked="{Binding IsMemberIncludedInBuild}"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Center">
+            <mantra:MarkdownTextBlock
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                IsVisible="{Binding IsMemberIncludedInBuildByDefault,Converter={x:Static ObjectConverters.Equal},ConverterParameter={x:True}}"
+                Text="{Binding IsMemberIncludedInBuildByDefault,Converter={x:Static views:MainWindow.IsMemberSettingByDefaultToStringConverter},StringFormat='`{0}`'}" />
+        </CheckBox>
+    </DataTemplate>
+</ResourceDictionary>

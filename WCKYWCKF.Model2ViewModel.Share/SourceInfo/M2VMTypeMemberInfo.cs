@@ -16,19 +16,25 @@ public record M2VMTypeMemberInfo
             throw new ArgumentException("error type", nameof(symbol));
         var typeSymbol = (symbol as IFieldSymbol)?.Type ?? (symbol as IPropertySymbol)?.Type!;
         GlobalTypeFullName = typeSymbol.ToDisplayString(M2VMHelper.GlobalSymbolDisplayFormat);
+        ContainerGlobalTypeFullName = symbol.ContainingType.ToDisplayString(M2VMHelper.GlobalSymbolDisplayFormat);
         MemberName = symbol.Name;
         IsValue = typeSymbol.IsValueType;
         IsField = symbol is IFieldSymbol;
         Accessibility = symbol.DeclaredAccessibility;
-
         if (symbol is IPropertySymbol propertySymbol)
         {
             GetterAccessibility = propertySymbol.GetMethod?.DeclaredAccessibility;
             SetterAccessibility = propertySymbol.SetMethod?.DeclaredAccessibility;
         }
+
+        MemberTypeInfo = new TypeofInfo(typeSymbol);
+        IsMemberTypeSystem = M2VMHelper.IsSystemType(typeSymbol);
     }
 
+    public required string ContainerGlobalTypeFullName { get; init; }
     public required string GlobalTypeFullName { get; init; }
+    public required bool IsMemberTypeSystem { get; init; }
+    public required TypeofInfo MemberTypeInfo { get; init; }
     public required bool IsValue { get; init; }
     public required string MemberName { get; init; }
     public required bool IsField { get; init; }

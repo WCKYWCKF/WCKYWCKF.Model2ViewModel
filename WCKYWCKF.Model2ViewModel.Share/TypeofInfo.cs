@@ -16,6 +16,6 @@ public sealed record TypeofInfo
         FQType = M2VMHelper.GetTypeofTargetTypeFQType(typeSymbol, true);
     }
 
-    public string? Sample { get; init; }
-    public required string FQType { get; init; }
+    public required string Sample { get; init; }
+    public string? FQType { get; init; }
 }
