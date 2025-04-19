@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AvaloniaProject">
+    <option name="projectPerEditor">
+      <map>
+        <entry key="WCKYWCKF.Model2ViewModel.Editor/App.axaml" value="WCKYWCKF.Model2ViewModel.Editor/WCKYWCKF.Model2ViewModel.Editor.csproj" />
+        <entry key="WCKYWCKF.Model2ViewModel.Editor/Styles/Index.axaml" value="WCKYWCKF.Model2ViewModel.Editor/WCKYWCKF.Model2ViewModel.Editor.csproj" />
+        <entry key="WCKYWCKF.Model2ViewModel.Editor/Views/ColorResourceBySemiDesign.axaml" value="WCKYWCKF.Model2ViewModel.Editor/WCKYWCKF.Model2ViewModel.Editor.csproj" />
+        <entry key="WCKYWCKF.Model2ViewModel.Editor/Views/EditMemberBuildTypeDialog.axaml" value="WCKYWCKF.Model2ViewModel.Editor/WCKYWCKF.Model2ViewModel.Editor.csproj" />
+        <entry key="WCKYWCKF.Model2ViewModel.Editor/Views/MainWindow.axaml" value="WCKYWCKF.Model2ViewModel.Editor/WCKYWCKF.Model2ViewModel.Editor.csproj" />
+        <entry key="WCKYWCKF.Model2ViewModel.Editor/Views/MemberAccessibilityDisplayTemplate.axaml" value="WCKYWCKF.Model2ViewModel.Editor/WCKYWCKF.Model2ViewModel.Editor.csproj" />
+        <entry key="WCKYWCKF.Model2ViewModel.Editor/Views/PreviewGeneratedCodeDialog.axaml" value="WCKYWCKF.Model2ViewModel.Editor/WCKYWCKF.Model2ViewModel.Editor.csproj" />
+        <entry key="WCKYWCKF.Model2ViewModel.Editor/Views/TreeDataGridTemplate/MemberAccessibilityDisplayTemplate.axaml" value="WCKYWCKF.Model2ViewModel.Editor/WCKYWCKF.Model2ViewModel.Editor.csproj" />
+        <entry key="WCKYWCKF.Model2ViewModel.Editor/Views/TreeDataGridTemplate/MemberBuildTypeDisplayTemplate.axaml" value="WCKYWCKF.Model2ViewModel.Editor/WCKYWCKF.Model2ViewModel.Editor.csproj" />
+        <entry key="WCKYWCKF.Model2ViewModel.Editor/Views/TreeDataGridTemplate/Resources1.axaml" value="WCKYWCKF.Model2ViewModel.Editor/WCKYWCKF.Model2ViewModel.Editor.csproj" />
+        <entry key="WCKYWCKF.Model2ViewModel.Editor/Views/TreeDataGridTemplate/SelectionHandlingCheckBoxTemplate.axaml" value="WCKYWCKF.Model2ViewModel.Editor/WCKYWCKF.Model2ViewModel.Editor.csproj" />
+        <entry key="WCKYWCKF.Model2ViewModel.Editor/Views/TreeDataGridTemplate/sdfgdhyjh.axaml" value="WCKYWCKF.Model2ViewModel.Editor/WCKYWCKF.Model2ViewModel.Editor.csproj" />
+        <entry key="WCKYWCKF.Model2ViewModel.Editor/Views/TreeDataGridTemplate/sssdfsdfsdf.axaml" value="WCKYWCKF.Model2ViewModel.Editor/WCKYWCKF.Model2ViewModel.Editor.csproj" />
+        <entry key="WCKYWCKF.Model2ViewModel.Editor/Views/TreeDataGridTemplate/ssss.axaml" value="WCKYWCKF.Model2ViewModel.Editor/WCKYWCKF.Model2ViewModel.Editor.csproj" />
+        <entry key="WCKYWCKF.Model2ViewModel.Editor/Views/VerticalSplitView.axaml" value="WCKYWCKF.Model2ViewModel.Editor/WCKYWCKF.Model2ViewModel.Editor.csproj" />
+      </map>
+    </option>
+  </component>
+</project>

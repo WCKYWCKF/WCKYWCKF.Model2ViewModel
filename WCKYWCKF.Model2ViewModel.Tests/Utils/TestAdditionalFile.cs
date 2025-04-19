@@ -14,7 +14,10 @@ public class TestAdditionalFile : AdditionalText
         _text = SourceText.From(text);
     }
 
-    public override SourceText GetText(CancellationToken cancellationToken = new()) => _text;
-
     public override string Path { get; }
+
+    public override SourceText GetText(CancellationToken cancellationToken = new())
+    {
+        return _text;
+    }
 }

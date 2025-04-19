@@ -2,9 +2,11 @@
 
 ## 简介
 
-这是一个源生成器，旨在帮助你在MVVM设计模式中，将复杂且庞大的`Model`配置类生成一个`ViewModel`版本。
+这是一个源生成器，旨在帮助你在MVVM设计模式中，将复杂且庞大的`Model`配置类或POCO类型生成一个`ViewModel`版本并提供相应的方法来对它们进行互转换，考虑到UI中MVVM的绑定还提供一个静态方法创建所有引用类型属性非空的实例（string类型除外）。
 
-使用它，你可以节省大量时间，不再需要通过复制粘贴的方式手动创建`ViewModel`，从而有更多时间专注于代码的设计与优化。
+使用它，你可以节省大量时间，不再需要通过复制粘贴的方式手动创建`ViewModel`和它们之间的赋值，从而有更多时间专注于代码的设计与优化。
+
+此项目绝大多树功能都是为了转换POCO类型或是结构较为简单的类而设计的，当你需要进行转换的类型具有复杂的结构时你需要自行处理而不是将所有工作都丢给此项目。
 
 此项目处于预览阶段，可能还存在一些细微的BUG，但它已能够完成绝大多数工作。
 
@@ -28,6 +30,7 @@
 
 * 每个生成的ViewModel名称都会带有SGVM后缀，以便于区分和识别。
 * 若`Model`中属性成员的类型为`enum`，或者其类型所属的命名空间以`System`开头，则这些类型的属性在生成的ViewModel中将保持原样，不会进行修改或转换。
+* 只有不是`static`并且同时存在`public get;public set`或`public get;public init`的`public`属性才会被加入到生成计划中。
 * 生成的`ViewModel`的命名空间将与被`GenerateViewModel`装饰器修饰的类的命名空间保持一致，这样可以更好地组织和管理代码结构。
 * 所有生成的`ViewModel`的修饰符都是`public partial class`，当你有特殊需要时可以通过分部类进行处理。
 * 所有实现了`IReadOnlyCollection<T>`和`ICollection<T>`接口但没有实现`INotifyCollectionChanged`接口的类型都将被替换为`ObservableCollection<T>`。
@@ -36,11 +39,15 @@
 
 此装饰器必须与`GenerateViewModel`一起使用，否则将无效。它能够指定某一类型不需要生成`ViewModel`，也能指定不生成某一类型的某一属性。
 
+#### 注意
+
 * 此装饰器对命名空间以`System`开头的类型无效。
 
 ### GenerateViewModelReplace
 
 此装饰器必须与`GenerateViewModel`一起使用，否则将无效。它能将指定类型的某一属性的类型替换为其他类型。
+
+#### 注意
 
 * 如果某一属性应用了此装饰器将不会再应用可观察集合替换。
 

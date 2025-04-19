@@ -1,0 +1,13 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:vm="clr-namespace:WCKYWCKF.Model2ViewModel.Editor.ViewModels">
+    <DataTemplate
+        x:Key="{x:Static vm:MainWindowViewModel.SelectionHandlingCheckBoxTemplateKey}"
+        DataType="vm:MetadataTDGItemViewModel">
+        <CheckBox
+            IsChecked="{Binding IsSelected}"
+            Command="{Binding UpdateIsAllSelectedCommand}"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center" />
+    </DataTemplate>
+</ResourceDictionary>

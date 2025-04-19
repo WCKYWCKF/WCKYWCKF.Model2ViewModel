@@ -1,0 +1,57 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net9.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+        <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+        <PublishAot>true</PublishAot>
+        <HotAvaloniaLite>enable</HotAvaloniaLite>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Folder Include="Assets\Fonts\"/>
+        <AvaloniaResource Include="Assets\**"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Avalonia" Version="11.2.6"/>
+        <PackageReference Include="Avalonia.Controls.TreeDataGrid" Version="11.1.1"/>
+        <PackageReference Include="Avalonia.Desktop" Version="11.2.6"/>
+        <PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.6"/>
+        <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
+        <PackageReference Include="Avalonia.Diagnostics" Version="11.2.6">
+            <IncludeAssets Condition="'$(Configuration)' != 'Debug'">none</IncludeAssets>
+            <PrivateAssets Condition="'$(Configuration)' != 'Debug'">all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="Avalonia.ReactiveUI" Version="11.2.6"/>
+        <PackageReference Include="FuzzySharp" Version="2.0.2"/>
+        <PackageReference Include="HotAvalonia" Version="3.0.0" PrivateAssets="All" Publish="True"/>
+        <PackageReference Include="Irihi.Mantra.Markdown" Version="0.7.0-nightly-20250416075932"/>
+        <PackageReference Include="Irihi.Mantra.Markdown.Plugin.AvaloniaHybrid" Version="0.7.0-nightly-20250416075932"/>
+        <PackageReference Include="Irihi.Mantra.Markdown.Plugin.FencedCodeBlock" Version="0.7.0-nightly-20250416075932"/>
+        <PackageReference Include="Irihi.Mantra.Markdown.Themes.Semi" Version="0.7.0-nightly-20250416075932"/>
+        <PackageReference Include="Irihi.Ursa.ReactiveUIExtension" Version="1.0.1"/>
+        <PackageReference Include="Semi.Avalonia.TreeDataGrid" Version="11.0.10.2"/>
+        <PackageReference Include="WCKY.Avalonia.AnimationLibrary" Version="1.0.0"/>
+        <PackageReference Include="ReactiveUI.SourceGenerators" Version="2.1.27">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Semi.Avalonia" Version="11.2.1.6"/>
+        <PackageReference Include="Irihi.Ursa" Version="1.10.0"/>
+        <PackageReference Include="Irihi.Ursa.Themes.Semi" Version="1.10.0"/>
+        <PackageReference Include="Material.Icons.Avalonia" Version="2.3.1"/>
+        <PackageReference Include="ReactiveMarbles.ObservableEvents.SourceGenerator" Version="1.3.1"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\WCKYWCKF.Model2ViewModel.Share\WCKYWCKF.Model2ViewModel.Share.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Reference Include="Microsoft.CodeAnalysis">
+            <HintPath>C:\Users\wckfx\.nuget\packages\microsoft.codeanalysis.common\4.13.0\lib\net8.0\Microsoft.CodeAnalysis.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+</Project>

@@ -1,0 +1,84 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:vm="clr-namespace:WCKYWCKF.Model2ViewModel.Editor.ViewModels"
+                    xmlns:codeAnalysis="clr-namespace:Microsoft.CodeAnalysis;assembly=Microsoft.CodeAnalysis"
+                    xmlns:ursa="https://irihi.tech/ursa"
+                    xmlns:views="clr-namespace:WCKYWCKF.Model2ViewModel.Editor.Views">
+    <DataTemplate x:Key="{x:Static vm:MainWindowViewModel.MemberAccessibilityDisplayTemplateKey}"
+                  DataType="vm:MetadataTDGItemViewModel">
+        <StackPanel
+            VerticalAlignment="Center"
+            HorizontalAlignment="Left"
+            Orientation="Horizontal"
+            IsVisible="{Binding Accessibility,Converter={x:Static ObjectConverters.IsNotNull}}">
+            <StackPanel.Styles>
+                <Style Selector="Border">
+                    <Setter Property="Padding" Value="8,3,8,3" />
+                    <Setter Property="CornerRadius" Value="{DynamicResource AvatarCircleCornerRadius}" />
+                </Style>
+                <Style Selector="Border.Public">
+                    <Setter Property="Background"
+                            Value="{DynamicResource AccessibilityEmphasisColorPublic}" />
+                </Style>
+                <Style Selector="Border.Private">
+                    <Setter Property="Background"
+                            Value="{DynamicResource AccessibilityEmphasisColorPrivate}" />
+                </Style>
+                <Style Selector="Border.Internal">
+                    <Setter Property="Background"
+                            Value="{DynamicResource AccessibilityEmphasisColorInternal}" />
+                </Style>
+                <Style Selector="Border.Protected">
+                    <Setter Property="Background"
+                            Value="{DynamicResource AccessibilityEmphasisColorProtected}" />
+                </Style>
+                <Style Selector="TextBlock">
+                    <Setter Property="VerticalAlignment" Value="Center" />
+                </Style>
+                <Style Selector="ursa|Divider">
+                    <!-- <Setter Property="Margin" Value="3,0,3,0"></Setter> -->
+                    <Setter Property="Orientation" Value="Vertical" />
+                </Style>
+            </StackPanel.Styles>
+            <TextBlock Text="成员：" />
+            <Border
+                Classes.Public="{Binding Accessibility,ConverterParameter={x:Static codeAnalysis:Accessibility.Public},Converter={x:Static ObjectConverters.Equal}}"
+                Classes.Private="{Binding Accessibility,ConverterParameter={x:Static codeAnalysis:Accessibility.Private},Converter={x:Static ObjectConverters.Equal}}"
+                Classes.Internal="{Binding Accessibility,ConverterParameter={x:Static codeAnalysis:Accessibility.Internal},Converter={x:Static ObjectConverters.Equal}}"
+                Classes.Protected="{Binding Accessibility,ConverterParameter={x:Static codeAnalysis:Accessibility.Protected},Converter={x:Static ObjectConverters.Equal}}">
+                <TextPresenter
+                    Text="{Binding Accessibility,Mode=OneWay,Converter={x:Static views:MainWindow.AccessibilityToStringConverter}}" />
+            </Border>
+            <ursa:Divider
+                Margin="3,0,3,0"
+                IsVisible="{Binding GetterAccessibility,Converter={x:Static ObjectConverters.IsNotNull}}" />
+            <TextBlock
+                IsVisible="{Binding GetterAccessibility,Converter={x:Static ObjectConverters.IsNotNull}}"
+                Text="Getter：" />
+            <Border
+                IsVisible="{Binding GetterAccessibility,Converter={x:Static ObjectConverters.IsNotNull}}"
+                Classes.Public="{Binding GetterAccessibility,ConverterParameter={x:Static codeAnalysis:Accessibility.Public},Converter={x:Static ObjectConverters.Equal}}"
+                Classes.Private="{Binding GetterAccessibility,ConverterParameter={x:Static codeAnalysis:Accessibility.Private},Converter={x:Static ObjectConverters.Equal}}"
+                Classes.Internal="{Binding GetterAccessibility,ConverterParameter={x:Static codeAnalysis:Accessibility.Internal},Converter={x:Static ObjectConverters.Equal}}"
+                Classes.Protected="{Binding GetterAccessibility,ConverterParameter={x:Static codeAnalysis:Accessibility.Protected},Converter={x:Static ObjectConverters.Equal}}">
+                <TextPresenter
+                    Text="{Binding GetterAccessibility,Mode=OneWay,Converter={x:Static views:MainWindow.AccessibilityToStringConverter}}" />
+            </Border>
+            <ursa:Divider
+                Margin="3,0,3,0"
+                IsVisible="{Binding SetterAccessibility,Converter={x:Static ObjectConverters.IsNotNull}}" />
+            <TextBlock
+                IsVisible="{Binding SetterAccessibility,Converter={x:Static ObjectConverters.IsNotNull}}"
+                Text="Setter：" />
+            <Border
+                IsVisible="{Binding SetterAccessibility,Converter={x:Static ObjectConverters.IsNotNull}}"
+                Classes.Public="{Binding SetterAccessibility,ConverterParameter={x:Static codeAnalysis:Accessibility.Public},Converter={x:Static ObjectConverters.Equal}}"
+                Classes.Private="{Binding SetterAccessibility,ConverterParameter={x:Static codeAnalysis:Accessibility.Private},Converter={x:Static ObjectConverters.Equal}}"
+                Classes.Internal="{Binding SetterAccessibility,ConverterParameter={x:Static codeAnalysis:Accessibility.Internal},Converter={x:Static ObjectConverters.Equal}}"
+                Classes.Protected="{Binding SetterAccessibility,ConverterParameter={x:Static codeAnalysis:Accessibility.Protected},Converter={x:Static ObjectConverters.Equal}}">
+                <TextPresenter
+                    Text="{Binding SetterAccessibility,Mode=OneWay,Converter={x:Static views:MainWindow.AccessibilityToStringConverter}}" />
+            </Border>
+        </StackPanel>
+    </DataTemplate>
+</ResourceDictionary>
