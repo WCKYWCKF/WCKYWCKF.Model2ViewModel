@@ -158,7 +158,7 @@ public sealed partial class MetadataTDGItemViewModel : ViewModelBase
         var first_IsMemberNullable = IsMemberNullable;
         this.WhenAnyValue(x => x.IsMemberIncludedInBuild, x => x.IsMemberNullable)
             .Where(x => x.Item1 != first_IsMemberIncludedInBuild || x.Item2 != first_IsMemberNullable)
-            .Do(_ => ConfirmChanges(null))
+            .Do(_ => ConfirmChanges(MemberBuildType))
             .Subscribe();
         MemberCodeText =
             $"{ContainerGlobalTypeFullName} {GetAccessibilityStr(Accessibility!.Value)} {GlobalTypeFullName} {Name} {(IsField is true ? ";" : $"{(GetterAccessibility is null ? "" : GetAccessibilityStr(GetterAccessibility.Value) + " get;")} {(SetterAccessibility is null ? "" : GetAccessibilityStr(SetterAccessibility.Value) + " set;")}")}";
@@ -215,7 +215,7 @@ public sealed partial class MetadataTDGItemViewModel : ViewModelBase
     {
         if (_typeInfo == null) return;
         var newValue = IsSelected;
-        foreach (var metadataTdgItem in Members)
+        foreach (var metadataTdgItem in FilterMembers)
             metadataTdgItem.IsSelected = newValue;
     }
 
@@ -280,7 +280,7 @@ public sealed partial class MetadataTDGItemViewModel : ViewModelBase
             _propertyOrFieldOperationInfos.RemoveKey(_typeMemberInfo!.GetKey());
         }
 
-        if (newType is not null && newType != MemberBuildType)
+        if (!string.IsNullOrWhiteSpace(newType) && newType != MemberBuildType)
         {
             if (_replaceGenerationInfo is null)
                 _replaceGenerationInfo = new M2VMReplaceGenerationInfo
@@ -306,7 +306,8 @@ public sealed partial class MetadataTDGItemViewModel : ViewModelBase
                     }
                 };
         }
-        else if (_replaceGenerationInfo is not null && IsMemberMarkedNonReplaceable is true)
+        else if (_replaceGenerationInfo is not null &&
+                 (IsMemberMarkedNonReplaceable is true || string.IsNullOrWhiteSpace(newType)))
         {
             _replaceGenerationInfo = null;
             _replaceGenerationInfos.RemoveKey(_typeMemberInfo!.GetKey());

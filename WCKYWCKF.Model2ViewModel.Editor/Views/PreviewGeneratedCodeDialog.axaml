@@ -1,17 +1,17 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:vm="clr-namespace:WCKYWCKF.Model2ViewModel.Editor.ViewModels"
-             xmlns:ursa="https://irihi.tech/ursa"
-             xmlns:mantra="https://irihi.tech/mantra"
-             xmlns:views="clr-namespace:WCKYWCKF.Model2ViewModel.Editor.Views"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             Width="{Binding $parent[ursa:UrsaWindow].Bounds.Width,Converter={x:Static views:PreviewGeneratedCodeDialog.DoubleToDoubleConverter}}"
-             Height="{Binding $parent[ursa:UrsaWindow].Bounds.Height,Converter={x:Static views:PreviewGeneratedCodeDialog.DoubleToDoubleConverter}}"
-             x:Class="WCKYWCKF.Model2ViewModel.Editor.Views.PreviewGeneratedCodeDialog"
-             x:DataType="vm:MainWindowViewModel">
-
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="clr-namespace:WCKYWCKF.Model2ViewModel.Editor.ViewModels"
+    xmlns:ursa="https://irihi.tech/ursa"
+    xmlns:mantra="https://irihi.tech/mantra"
+    xmlns:views="clr-namespace:WCKYWCKF.Model2ViewModel.Editor.Views"
+    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+    Width="{Binding $parent[ursa:UrsaWindow].Bounds.Width,Converter={x:Static views:PreviewGeneratedCodeDialog.DoubleToDoubleConverter}}"
+    Height="{Binding $parent[ursa:UrsaWindow].Bounds.Height,Converter={x:Static views:PreviewGeneratedCodeDialog.DoubleToDoubleConverter}}"
+    x:Class="WCKYWCKF.Model2ViewModel.Editor.Views.PreviewGeneratedCodeDialog"
+    x:DataType="vm:MainWindowViewModel">
     <Grid
         RowDefinitions="65*,35*"
         ColumnDefinitions="35*,65*">
