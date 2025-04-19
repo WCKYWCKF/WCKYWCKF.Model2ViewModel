@@ -392,8 +392,9 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             LoadingMessage = "正在保存Model元数据文件...";
             // await Task.Delay(TimeSpan.FromSeconds(2));
-            await using var fileStream = File.OpenWrite(SaveFilePath!);
-            await JsonSerializer.SerializeAsync(fileStream, M2VMHelperJSC.Default.M2VMGenerationInfo);
+            File.Delete(SaveFilePath!);
+            await using var fileStream = File.Create(SaveFilePath!);
+            await JsonSerializer.SerializeAsync(fileStream, ModelMetadata, M2VMHelperJSC.Default.M2VMGenerationInfo!);
             Notification notification = new()
             {
                 Title = "保存Model元数据文件成功",
