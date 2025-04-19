@@ -231,7 +231,12 @@ public partial class MainWindowViewModel : ViewModelBase
                 new MetadataTDGItemViewModel(info, ModelMetadata!, _operationInfos, _replaceGenerationInfos, this))
             .Publish();
 
-        share.FilterOnObservable(model => model.Members.WhenAnyValue(x => x.Count).Select(x => x > 0))
+        share.TransformMany(x => x.FilterMembers, x => x.GetKey()!)
+            .FilterOnObservable(x => x.WhenAnyValue(y => y.IsSelected))
+            .Bind(out _selection)
+            .Subscribe();
+
+        share.FilterOnObservable(model => model.FilterMembers.WhenAnyValue(x => x.Count).Select(x => x > 0))
             .SortAndBind(out var source, SortExpressionComparer<MetadataTDGItemViewModel>.Ascending(x => x.Name))
             .Subscribe();
         Source = new HierarchicalTreeDataGridSource<MetadataTDGItemViewModel>(source)
@@ -301,8 +306,6 @@ public partial class MainWindowViewModel : ViewModelBase
                 SortExpressionComparer<MetadataTDGItemViewModel>
                     .Descending(x => x.WeightedRatioForMemberCodeText)
                     .ThenByAscending(x => x.Name))
-            .FilterOnObservable(x => x.WhenAnyValue(y => y.IsSelected))
-            .Bind(out _selection)
             .Subscribe();
         SearchSource = new HierarchicalTreeDataGridSource<MetadataTDGItemViewModel>(dataWarpers)
         {
@@ -545,7 +548,7 @@ public partial class MainWindowViewModel : ViewModelBase
     [ReactiveCommand]
     private void ConfirmBatchModify()
     {
-        foreach (var metadataTdgItemViewModel in _selection)
+        foreach (var metadataTdgItemViewModel in _selection.ToList())
         {
             if (BatchEditing_NewIsMemberIncludeInBuild is not null)
                 metadataTdgItemViewModel.IsMemberIncludedInBuild = BatchEditing_NewIsMemberIncludeInBuild;
