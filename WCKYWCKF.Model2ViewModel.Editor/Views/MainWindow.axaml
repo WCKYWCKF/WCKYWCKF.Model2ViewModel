@@ -70,7 +70,7 @@
                         FileFilter="[类型信息文件,*.json][All]"
                         AllowMultiple="False"
                         UsePickerType="OpenFile"
-                        IsClearSelectionOnCancel="False"
+                        IsClearSelectionOnCancel="True"
                         IsOmitCommandOnCancel="True"
                         Command="{Binding OpenModelMetadataFileCommand}"
                         Theme="{DynamicResource ButtonPathPicker}" />
