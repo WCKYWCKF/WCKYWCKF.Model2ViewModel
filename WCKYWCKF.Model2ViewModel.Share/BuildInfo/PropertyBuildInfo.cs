@@ -22,11 +22,15 @@ public record PropertyBuildInfo
                  {{GetPropertySetterTemplate()}}
                  {{TabStr}}{{TabStr}}}
                  {{TabStr}}}
-                 {{TabStr}}partial void On{{PropertyName}}Changing({{propertyType}} value);
-                 {{TabStr}}partial void On{{PropertyName}}Changing({{propertyType}} oldValue, {{propertyType}} newValue);
-                 {{TabStr}}partial void On{{PropertyName}}Changed({{propertyType}} value);
-                 {{TabStr}}partial void On{{PropertyName}}Changed({{propertyType}} oldValue, {{propertyType}} newValue);
-                 """;
+                 """ + (generateMode is GenerateMode.CommunityMvvm
+            ? $$"""
+
+                {{TabStr}}partial void On{{PropertyName}}Changing({{propertyType}} value);
+                {{TabStr}}partial void On{{PropertyName}}Changing({{propertyType}} oldValue, {{propertyType}} newValue);
+                {{TabStr}}partial void On{{PropertyName}}Changed({{propertyType}} value);
+                {{TabStr}}partial void On{{PropertyName}}Changed({{propertyType}} oldValue, {{propertyType}} newValue);
+                """
+            : "");
 
         string GetPropertySetterTemplate()
         {
