@@ -23,8 +23,6 @@ public partial class MainWindow : ReactiveUrsaWindow<MainWindowViewModel>
     private ToggleButton? _lates_TabItem;
     private WindowNotificationManager? _notificationManager;
 
-    private OverlayDialogOptions? _overlayDialogOptions;
-
     public MainWindow()
     {
         InitializeComponent();
@@ -96,7 +94,7 @@ public partial class MainWindow : ReactiveUrsaWindow<MainWindowViewModel>
 
     private void OpenEditMemberBuildTypeDialog(OpenEditMemberBuildTypeDialogEvent e)
     {
-        _overlayDialogOptions ??= new OverlayDialogOptions
+        OverlayDialogOptions _overlayDialogOptions = new OverlayDialogOptions
         {
             Title = "编辑成员构建类型",
             CanResize = false,
@@ -168,7 +166,7 @@ public partial class MainWindow : ReactiveUrsaWindow<MainWindowViewModel>
         {
             if (ViewModel is null) return;
             await ViewModel.PreviewGeneratedCodeCommand.Execute();
-            _overlayDialogOptions ??= new OverlayDialogOptions
+            OverlayDialogOptions _overlayDialogOptions = new OverlayDialogOptions
             {
                 Title = "正在预览将会构建的代码",
                 CanResize = false,
