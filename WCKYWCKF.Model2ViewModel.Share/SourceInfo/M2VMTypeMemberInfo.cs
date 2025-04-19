@@ -27,7 +27,7 @@ public record M2VMTypeMemberInfo
             SetterAccessibility = propertySymbol.SetMethod?.DeclaredAccessibility;
         }
 
-        MemberTypeInfo = new TypeofInfo(typeSymbol);
+        MemberTypeInfo = new TypeofInfo(symbol.ContainingType);
         IsMemberTypeSystem = M2VMHelper.IsSystemType(typeSymbol);
     }
 

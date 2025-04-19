@@ -130,7 +130,7 @@ public static class M2VMHelper
     {
         return $"typeof({typeSymbol.ToDisplayString(fQType
             ? GlobalSymbolDisplayFormat
-            : SymbolDisplayFormat.MinimallyQualifiedFormat)})";
+            : SymbolDisplayFormat.MinimallyQualifiedFormat).Replace(typeSymbol.IsValueType ? "" : "?", "")})";
     }
 
     public static string GetTypeofTargetTypeFQType(string typeName)
