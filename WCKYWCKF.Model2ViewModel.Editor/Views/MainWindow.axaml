@@ -11,7 +11,7 @@
     mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
     x:Class="WCKYWCKF.Model2ViewModel.Editor.Views.MainWindow"
     x:DataType="vm:MainWindowViewModel"
-    Icon="/Assets/avalonia-logo.ico"
+    Icon="/Assets/WCKYWCKF.Model2ViewModel.Editor-LOGO.ico"
     Title="WCKYWCKF.Model2ViewModel.Editor">
     <ursa:UrsaWindow.RightContent>
         <ursa:ThemeToggleButton IsThreeState="True" />

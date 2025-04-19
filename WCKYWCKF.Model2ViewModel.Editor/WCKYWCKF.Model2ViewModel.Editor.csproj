@@ -7,6 +7,7 @@
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
         <PublishAot>true</PublishAot>
         <HotAvaloniaLite>enable</HotAvaloniaLite>
+        <ApplicationIcon>Assets\WCKYWCKF.Model2ViewModel.Editor-LOGO.ico</ApplicationIcon>
     </PropertyGroup>
 
     <ItemGroup>

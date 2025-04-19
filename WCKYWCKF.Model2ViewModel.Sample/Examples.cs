@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using CommunityToolkit.Mvvm.ComponentModel;
+using EmmyLua.LanguageServer.Framework.Protocol.Capabilities.Client.ClientCapabilities;
 
 namespace WCKYWCKF.Model2ViewModel.Sample;
 
@@ -26,18 +27,5 @@ public class DDS
 
 // [M2VMGenerationInfo(TargetTypeFQType = typeof(ClientCapabilities))]
 [M2VMGenerationInfo(TargetTypeFQType = typeof(ComplexModel))]
-[M2VMPropertyOrFieldOperationInfo(TargetTypeFQType = typeof(DDS),
-    TargetMemberName = nameof(DDS.Str2),
-    TargetOperation = PropertyOrFieldOperationKind.IgnoreProperty)]
-[M2VMPropertyOrFieldOperationInfo(TargetTypeFQType = typeof(ComplexModel),
-    TargetMemberName = nameof(ComplexModel.TestPublicField),
-    TargetOperation = PropertyOrFieldOperationKind.IncludePropertyOrField)]
-[M2VMPropertyOrFieldOperationInfo(TargetTypeFQType = typeof(ComplexModel),
-    TargetMemberName = "TestPrivateField",
-    TargetOperation = PropertyOrFieldOperationKind.IncludePropertyOrField |
-                      PropertyOrFieldOperationKind.TypeIsNullable)]
-[M2VMReplaceGenerationInfo(TargetTypeFQType = typeof(ComplexModel),
-    TargetMemberName = nameof(ComplexModel.Dates),
-    ReplaceFQType = typeof(List<string>))]
 [M2VMSaveGenerationInfo(SaveFilePath = @"D:\Temp\test.json")]
-public class TF : ObservableObject;
+public partial class TF : ObservableObject;
