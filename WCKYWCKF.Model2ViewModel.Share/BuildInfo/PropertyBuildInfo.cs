@@ -12,7 +12,7 @@ public record PropertyBuildInfo
 
     public string CreatePropertyCode(GenerateMode generateMode, bool useAutoField)
     {
-        var fieldName = useAutoField ? "filed" : GetFieldName(PropertyName);
+        var fieldName = useAutoField ? "field" : GetFieldName(PropertyName);
         var propertyType = GlobalPropertyFQType + (IsNullable ? "?" : "");
         return $$"""
                  {{(useAutoField ? "" : $"{TabStr}private {propertyType} {fieldName};")}} 
@@ -37,7 +37,7 @@ public record PropertyBuildInfo
             return generateMode switch
             {
                 GenerateMode.RxUI =>
-                    $$"""{{TabStr}}{{TabStr}}{{TabStr}}this.RaiseAndSetIfChanged(ref {{{fieldName}}}, value);""",
+                    $$"""{{TabStr}}{{TabStr}}{{TabStr}}this.RaiseAndSetIfChanged(ref {{fieldName}}, value);""",
                 GenerateMode.CommunityMvvm =>
                     $$"""
                       {{TabStr}}{{TabStr}}{{TabStr}}if (!global::System.Collections.Generic.EqualityComparer<{{propertyType}}>.Default.Equals({{fieldName}}, value))
