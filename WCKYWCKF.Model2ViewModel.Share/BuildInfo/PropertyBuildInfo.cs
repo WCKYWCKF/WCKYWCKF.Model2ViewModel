@@ -13,7 +13,7 @@ public record PropertyBuildInfo
     public string CreatePropertyCode(GenerateMode generateMode, bool useAutoField)
     {
         var fieldName = useAutoField ? "field" : GetFieldName(PropertyName);
-        var propertyType = GlobalPropertyFQType + (IsNullable ? "?" : "");
+        var propertyType = GlobalPropertyFQType.Replace("?", "") + (IsNullable ? "?" : "");
         return $$"""
                  {{(useAutoField ? "" : $"{TabStr}private {propertyType} {fieldName};")}} 
                  {{TabStr}}public {{propertyType}} {{PropertyName}} {
