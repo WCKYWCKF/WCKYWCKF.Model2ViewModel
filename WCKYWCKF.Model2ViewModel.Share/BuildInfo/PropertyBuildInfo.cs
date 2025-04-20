@@ -12,8 +12,8 @@ public record PropertyBuildInfo
 
     public string CreatePropertyCode(GenerateMode generateMode, bool useAutoField)
     {
-        var fieldName = useAutoField ? "filed" : GetFieldName(PropertyName);
-        var propertyType = GlobalPropertyFQType + (IsNullable ? "?" : "");
+        var fieldName = useAutoField ? "field" : GetFieldName(PropertyName);
+        var propertyType = GlobalPropertyFQType.Replace("?", "") + (IsNullable ? "?" : "");
         return $$"""
                  {{(useAutoField ? "" : $"{TabStr}private {propertyType} {fieldName};")}} 
                  {{TabStr}}public {{propertyType}} {{PropertyName}} {
@@ -22,18 +22,22 @@ public record PropertyBuildInfo
                  {{GetPropertySetterTemplate()}}
                  {{TabStr}}{{TabStr}}}
                  {{TabStr}}}
-                 {{TabStr}}partial void On{{PropertyName}}Changing({{propertyType}} value);
-                 {{TabStr}}partial void On{{PropertyName}}Changing({{propertyType}} oldValue, {{propertyType}} newValue);
-                 {{TabStr}}partial void On{{PropertyName}}Changed({{propertyType}} value);
-                 {{TabStr}}partial void On{{PropertyName}}Changed({{propertyType}} oldValue, {{propertyType}} newValue);
-                 """;
+                 """ + (generateMode is GenerateMode.CommunityMvvm
+            ? $$"""
+
+                {{TabStr}}partial void On{{PropertyName}}Changing({{propertyType}} value);
+                {{TabStr}}partial void On{{PropertyName}}Changing({{propertyType}} oldValue, {{propertyType}} newValue);
+                {{TabStr}}partial void On{{PropertyName}}Changed({{propertyType}} value);
+                {{TabStr}}partial void On{{PropertyName}}Changed({{propertyType}} oldValue, {{propertyType}} newValue);
+                """
+            : "");
 
         string GetPropertySetterTemplate()
         {
             return generateMode switch
             {
                 GenerateMode.RxUI =>
-                    $$"""{{TabStr}}{{TabStr}}{{TabStr}}this.RaiseAndSetIfChanged(ref {{{fieldName}}}, value);""",
+                    $$"""{{TabStr}}{{TabStr}}{{TabStr}}this.RaiseAndSetIfChanged(ref {{fieldName}}, value);""",
                 GenerateMode.CommunityMvvm =>
                     $$"""
                       {{TabStr}}{{TabStr}}{{TabStr}}if (!global::System.Collections.Generic.EqualityComparer<{{propertyType}}>.Default.Equals({{fieldName}}, value))
