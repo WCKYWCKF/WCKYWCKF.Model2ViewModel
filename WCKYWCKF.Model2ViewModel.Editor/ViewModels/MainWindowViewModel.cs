@@ -465,44 +465,52 @@ public partial class MainWindowViewModel : ViewModelBase
                 })
                 .OrderBy(x => x.FileName)
                 .ToList());
-        var operations = ModelMetadata.Operations.Select(x =>
-        {
-            return
-                $"""[M2VMPropertyOrFieldOperationInfo(TargetTypeFQType = {x.TargetTypeTypeofInfo.Sample}, TargetMemberName = "{x.TargetMemberName}", TargetOperation = {GetOperation(x.TargetOperation)})]""";
-
-            string GetOperation(PropertyOrFieldOperationKind operationKind)
+        var count = 0;
+        var all = ModelMetadata.Replaces.Concat<M2VMPropertyOrFieldOperationBase>(ModelMetadata.Operations)
+            .OrderBy(x => x.TargetTypeFQType)
+            .ThenBy(x => x.TargetMemberName)
+            .ThenByDescending(x => x is M2VMPropertyOrFieldOperationInfo)
+            .Select(x =>
             {
-                string[] str =
-                [
-                    operationKind.HasFlag(PropertyOrFieldOperationKind.IgnoreProperty)
-                        ? "PropertyOrFieldOperationKind.IgnoreProperty"
-                        : "",
-                    operationKind.HasFlag(PropertyOrFieldOperationKind.DoNotReplaceTargetType)
-                        ? "PropertyOrFieldOperationKind.DoNotReplaceTargetType"
-                        : "",
-                    operationKind.HasFlag(PropertyOrFieldOperationKind.IncludePropertyOrField)
-                        ? "PropertyOrFieldOperationKind.IncludePropertyOrField"
-                        : "",
-                    operationKind.HasFlag(PropertyOrFieldOperationKind.TypeIsNotNullable)
-                        ? "PropertyOrFieldOperationKind.TypeIsNotNullable"
-                        : "",
-                    operationKind.HasFlag(PropertyOrFieldOperationKind.TypeIsNullable)
-                        ? "PropertyOrFieldOperationKind.TypeIsNullable"
-                        : ""
-                ];
-                StringBuilder builder = new();
-                var distinct = str.Where(y => !string.IsNullOrEmpty(y)).ToList();
-                builder.Append(distinct.FirstOrDefault());
-                foreach (var item in distinct.Skip(1)) builder.Append(" | " + item);
+                if (x is M2VMPropertyOrFieldOperationInfo info)
+                {
+                    return
+                        $"""[M2VMPropertyOrFieldOperationInfo(TargetTypeFQType = {info.TargetTypeTypeofInfo.Sample}, TargetMemberName = "{info.TargetMemberName}", TargetOperation = {GetOperation(info.TargetOperation)})]""";
 
-                return builder.ToString();
-            }
-        });
-        var replaces = ModelMetadata.Replaces.Select(x =>
-            $"""[M2VMReplaceGenerationInfo(TargetTypeFQType = {x.TargetTypeTypeofInfo.Sample}, TargetMemberName = "{x.TargetMemberName}", ReplaceFQType = {x.ReplaceTypeTypeofInfo.Sample})]""");
+                    string GetOperation(PropertyOrFieldOperationKind operationKind)
+                    {
+                        string[] str =
+                        [
+                            operationKind.HasFlag(PropertyOrFieldOperationKind.IgnoreProperty)
+                                ? "PropertyOrFieldOperationKind.IgnoreProperty"
+                                : "",
+                            operationKind.HasFlag(PropertyOrFieldOperationKind.DoNotReplaceTargetType)
+                                ? "PropertyOrFieldOperationKind.DoNotReplaceTargetType"
+                                : "",
+                            operationKind.HasFlag(PropertyOrFieldOperationKind.IncludePropertyOrField)
+                                ? "PropertyOrFieldOperationKind.IncludePropertyOrField"
+                                : "",
+                            operationKind.HasFlag(PropertyOrFieldOperationKind.TypeIsNotNullable)
+                                ? "PropertyOrFieldOperationKind.TypeIsNotNullable"
+                                : "",
+                            operationKind.HasFlag(PropertyOrFieldOperationKind.TypeIsNullable)
+                                ? "PropertyOrFieldOperationKind.TypeIsNullable"
+                                : ""
+                        ];
+                        StringBuilder builder = new();
+                        var distinct = str.Where(y => !string.IsNullOrEmpty(y)).ToList();
+                        builder.Append(distinct.FirstOrDefault());
+                        foreach (var item in distinct.Skip(1)) builder.Append(" | " + item);
+
+                        return builder.ToString();
+                    }
+                }
+
+                return
+                    $"""[M2VMReplaceGenerationInfo(TargetTypeFQType = {x.TargetTypeTypeofInfo.Sample}, TargetMemberName = "{x.TargetMemberName}", ReplaceFQType = {(x as M2VMReplaceGenerationInfo)!.ReplaceTypeTypeofInfo.Sample})]""";
+            });
         var rootCode = await Task.Run(() => $"""
-                                             {string.Join("\n", operations)}
-                                             {string.Join("\n", replaces)}
+                                             {string.Join("\n", all)}
                                              public partial class {ModelMetadata.ClassName};
                                              """);
         SummaryGeneratedBorderMdDocument = await Task.Run(() => Markdown.Parse(
