@@ -13,40 +13,63 @@
     x:Class="WCKYWCKF.Model2ViewModel.Editor.Views.PreviewGeneratedCodeDialog"
     x:DataType="vm:MainWindowViewModel">
     <Grid
-        RowDefinitions="65*,35*"
+        RowDefinitions="30*,35*,35*"
         ColumnDefinitions="35*,65*">
         <mantra:MarkdownView
             Grid.Row="0"
             Grid.Column="0"
             Margin="5"
             Document="{Binding SummaryGeneratedBorderMdDocument}" />
-        <mantra:MarkdownView
+        <ursa:LoadingContainer
             Grid.Row="1"
             Grid.Column="0"
-            Grid.ColumnSpan="2"
             Margin="5"
-            Document="{Binding RootTypePartialCodeBorderMdDocument}" />
+            LoadingMessage="{Binding LoadingMessage}"
+            IsLoading="{Binding LoadingMessage,Converter={x:Static ObjectConverters.IsNotNull}}"
+            HorizontalContentAlignment="Stretch"
+            VerticalContentAlignment="Stretch">
+            <DockPanel>
+                <TextBox
+                    DockPanel.Dock="Top"
+                    Classes="clearButton"
+                    Margin="0,5,0,5"
+                    Text="{Binding PreviewGeneratedCodeFilesFilterByFileName}" />
+                <ListBox
+                    Name="ListBox"
+                    DockPanel.Dock="Bottom"
+                    SelectionMode="AlwaysSelected"
+                    ItemsSource="{Binding FilterPreviewGeneratedCodeFiles}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding FileName}" />
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </DockPanel>
+        </ursa:LoadingContainer>
         <ursa:LoadingContainer
             Grid.Row="0"
+            Grid.RowSpan="2"
             Grid.Column="1"
             Margin="5"
             LoadingMessage="{Binding LoadingMessage}"
             IsLoading="{Binding LoadingMessage,Converter={x:Static ObjectConverters.IsNotNull}}"
             HorizontalContentAlignment="Stretch"
             VerticalContentAlignment="Stretch">
-            <TabControl
-                ItemsSource="{Binding PreviewGeneratedCodeFiles}">
-                <TabControl.ItemTemplate>
-                    <DataTemplate>
-                        <Label Content="{Binding FileName}" />
-                    </DataTemplate>
-                </TabControl.ItemTemplate>
-                <TabControl.ContentTemplate>
-                    <DataTemplate DataType="vm:ViewModelCodeFile">
-                        <mantra:MarkdownView Document="{Binding CodeMdDocument}" />
-                    </DataTemplate>
-                </TabControl.ContentTemplate>
-            </TabControl>
+            <mantra:MarkdownView Document="{Binding #ListBox.((vm:ViewModelCodeFile)SelectedItem).CodeMdDocument}" />
+        </ursa:LoadingContainer>
+        <ursa:LoadingContainer
+            Grid.Row="2"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            Margin="5"
+            LoadingMessage="{Binding LoadingMessage}"
+            IsLoading="{Binding LoadingMessage,Converter={x:Static ObjectConverters.IsNotNull}}"
+            HorizontalContentAlignment="Stretch"
+            VerticalContentAlignment="Stretch">
+            <mantra:MarkdownView
+                Margin="5"
+                Document="{Binding RootTypePartialCodeBorderMdDocument}" />
         </ursa:LoadingContainer>
     </Grid>
 </UserControl>
