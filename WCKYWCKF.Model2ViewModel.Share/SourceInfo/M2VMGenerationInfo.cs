@@ -190,7 +190,7 @@ public record M2VMGenerationInfo
             {
                 GlobalSourceFQType = m2VmTypeInfo.GlobalTypeFullName,
                 ViewModelName = $"{m2VmTypeInfo.Name}SGVM",
-                Namespace = m2VmTypeInfo.NameSpace,
+                Namespace = NameSpace,
                 Properties = properties
             });
         }

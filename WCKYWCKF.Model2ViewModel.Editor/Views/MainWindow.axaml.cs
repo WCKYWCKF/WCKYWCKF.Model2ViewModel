@@ -94,7 +94,7 @@ public partial class MainWindow : ReactiveUrsaWindow<MainWindowViewModel>
 
     private void OpenEditMemberBuildTypeDialog(OpenEditMemberBuildTypeDialogEvent e)
     {
-        OverlayDialogOptions _overlayDialogOptions = new OverlayDialogOptions
+        var _overlayDialogOptions = new OverlayDialogOptions
         {
             Title = "编辑成员构建类型",
             CanResize = false,
@@ -166,7 +166,7 @@ public partial class MainWindow : ReactiveUrsaWindow<MainWindowViewModel>
         {
             if (ViewModel is null) return;
             await ViewModel.PreviewGeneratedCodeCommand.Execute();
-            OverlayDialogOptions _overlayDialogOptions = new OverlayDialogOptions
+            var _overlayDialogOptions = new OverlayDialogOptions
             {
                 Title = "正在预览将会构建的代码",
                 CanResize = false,

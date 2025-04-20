@@ -14,6 +14,7 @@ using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Controls.Notifications;
 using DynamicData;
 using DynamicData.Binding;
+using FuzzySharp;
 using Irihi.Mantra.Markdown.Plugin.AvaloniaHybrid.MarkdigPlugins;
 using Markdig;
 using Markdig.Syntax;
@@ -148,6 +149,9 @@ public partial class MainWindowViewModel : ViewModelBase
     private readonly SourceCache<M2VMPropertyOrFieldOperationInfo, string> _operationInfos = new(y => y.GetKey());
     private readonly SourceCache<M2VMReplaceGenerationInfo, string> _replaceGenerationInfos = new(y => y.GetKey());
     private readonly ReadOnlyObservableCollection<MetadataTDGItemViewModel> _selection;
+
+    [BindableDerivedList]
+    private readonly ReadOnlyObservableCollection<ViewModelCodeFile> _filterPreviewGeneratedCodeFiles;
 
     static MainWindowViewModel()
     {
@@ -335,6 +339,16 @@ public partial class MainWindowViewModel : ViewModelBase
         PreviewGeneratedCodeFiles = [];
         SummaryGeneratedBorderMdDocument = new MarkdownDocument();
         RootTypePartialCodeBorderMdDocument = new MarkdownDocument();
+
+        this.WhenAnyValue(x => x.PreviewGeneratedCodeFiles)
+            .Select(x =>
+                x is null ? Array.Empty<ViewModelCodeFile>().AsObservableChangeSet() : x.AsObservableChangeSet())
+            .Switch()
+            .AutoRefreshOnObservable(_ => this.WhenAnyValue(x => x.PreviewGeneratedCodeFilesFilterByFileName))
+            .Sort(SortExpressionComparer<ViewModelCodeFile>.Descending(x =>
+                Fuzz.WeightedRatio(PreviewGeneratedCodeFilesFilterByFileName ?? "", x.FileName)))
+            .Bind(out _filterPreviewGeneratedCodeFiles)
+            .Subscribe();
         return;
 
         void TryAdd<T>(List<T> target, T newItem)
@@ -380,6 +394,7 @@ public partial class MainWindowViewModel : ViewModelBase
     [Reactive] public partial string? LoadingMessage { get; set; }
 
     [Reactive] public partial IReadOnlyList<ViewModelCodeFile>? PreviewGeneratedCodeFiles { get; set; }
+    [Reactive] public partial string? PreviewGeneratedCodeFilesFilterByFileName { get; set; }
 
     [ReactiveCommand(CanExecute = nameof(_metadataIsNotEmpty))]
     [RequiresDynamicCode(
