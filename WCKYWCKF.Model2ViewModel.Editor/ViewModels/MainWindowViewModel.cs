@@ -575,7 +575,7 @@ public partial class MainWindowViewModel : ViewModelBase
     [ReactiveCommand]
     private void CancelCurrentSelection()
     {
-        foreach (var metadataTdgItemViewModel in _selection)
+        foreach (var metadataTdgItemViewModel in _selection.ToList())
             metadataTdgItemViewModel.IsSelected = false;
     }
 
